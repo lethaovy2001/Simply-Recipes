@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    @author Dung V Vo
+    bottom navigation menu design
+-->
+
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navHome"
+        android:icon="@drawable/ic_home_icon"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/navPantry"
+        android:icon="@drawable/ic_baseline_list_24"
+        android:title="@string/pantry" />
+    <item
+        android:id="@+id/navFavorite"
+        android:icon="@drawable/ic_baseline_favorite_border_24"
+        android:title="@string/favorite" />
+    <item
+        android:id="@+id/navShoppingList"
+        android:icon="@drawable/ic_iconmonstr_shopping_cart"
+        android:title="@string/shopping_list" />
+</menu>

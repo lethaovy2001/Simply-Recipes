@@ -10,4 +10,12 @@
     <string name="dont_have_an_account">Don\'t have an account?</string>
     <string name="already_had_an_account">Already had an account?</string>
 
+
+    <string name="home">Home</string>
+    <string name="pantry">Pantry</string>
+    <string name="favorite">Favorite</string>
+    <string name="shopping_list">Shopping List</string>
+
+
+
 </resources>

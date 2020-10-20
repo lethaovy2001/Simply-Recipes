@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.SignUpActivity">
+    android:layout_height="match_parent">
+    // Temporary comment to avoid crash error
+<!--    tools:context=".Activities.SignUpActivity">-->
 
     <TextView
         android:id="@+id/create_account_tv"
