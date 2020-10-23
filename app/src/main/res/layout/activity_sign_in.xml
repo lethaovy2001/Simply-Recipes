@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    // Temporary comment to avoid crash error
-<!--    tools:context=".Activities.SignInActivity">-->
+    android:layout_height="match_parent"
+
+    tools:context="com.example.simplyrecipes.Activities.SignInActivity">
 
     <EditText
         android:id="@+id/editTextTextPassword"
@@ -99,4 +99,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

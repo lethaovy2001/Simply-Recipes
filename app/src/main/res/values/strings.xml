@@ -14,6 +14,7 @@
     <string name="home">Home</string>
     <string name="pantry">Pantry</string>
     <string name="favorite">Favorite</string>
+    <string name="shopping_list">Shopping List</string>
     <string name="recipe_of_the_week">Recipe of the week</string>
     <string name="latest_recipes">Latest Recipes</string>
     <string name="pop_recipes">Popular Recipes</string>
