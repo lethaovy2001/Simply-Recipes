@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     // Temporary comment to avoid crash error
-<!--    tools:context=".Activities.MainActivity">-->
+    tools:context=".Activities.MainActivity">
 
     // top toolbar for all the screens
     <include
