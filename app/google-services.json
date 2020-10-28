@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "912294773858",
+    "firebase_url": "https://simply-recipe.firebaseio.com",
+    "project_id": "simply-recipe",
+    "storage_bucket": "simply-recipe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912294773858:android:99d2f1049dbf23a5603d3b",
+        "android_client_info": {
+          "package_name": "com.example.simplyrecipes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912294773858-q9igf7f1t6dkf0b4g33ljen8bntatbmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA36Ow00oKUUh35r4ZGfGkkvoYaGSWnYbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "912294773858-q9igf7f1t6dkf0b4g33ljen8bntatbmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
