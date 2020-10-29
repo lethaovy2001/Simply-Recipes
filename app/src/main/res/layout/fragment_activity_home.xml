@@ -148,8 +148,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/western_recipes_recyclerview"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:scrollbars="horizontal"/>
+                    android:layout_height="140dp"
+                    android:scrollbars="horizontal" />
             </HorizontalScrollView>
 
             <TextView
