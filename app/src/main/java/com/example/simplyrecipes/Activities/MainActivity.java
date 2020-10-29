@@ -79,9 +79,6 @@ public class MainActivity extends AppCompatActivity {
         mediterraneanRecyclerView = findViewById(R.id.mediterranean_recipes_recyclerview);
         mediterraneanRecipes = new ArrayList<>();
 
-
-
-
         extractRecipeOfWeek();
         extractPopularRecipes();
         extractAsianRecipes();
@@ -157,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.addQueryParameter("q", "American");
         // displays 30 results from the query
         urlBuilder.addQueryParameter("from", "4");
-        urlBuilder.addQueryParameter("to","10");
+        urlBuilder.addQueryParameter("to","34");
         // application key and id from Edamam
         urlBuilder.addQueryParameter("app_id", "4dc026e9");
         urlBuilder.addQueryParameter("app_key", "7c6bbd8526153dcbcb3e8d96b46696c6");
@@ -220,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.addQueryParameter("q", "steak");
         // displays 30 results from the query
         urlBuilder.addQueryParameter("from", "0");
-        urlBuilder.addQueryParameter("to","100");
+        urlBuilder.addQueryParameter("to","30");
         // application key and id from Edamam
         urlBuilder.addQueryParameter("app_id", "4dc026e9");
         urlBuilder.addQueryParameter("app_key", "7c6bbd8526153dcbcb3e8d96b46696c6");
@@ -260,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.addQueryParameter("q", "asian, chinese");
         // displays 30 results from the query
         urlBuilder.addQueryParameter("from", "0");
-        urlBuilder.addQueryParameter("to","100");
+        urlBuilder.addQueryParameter("to","30");
         // application key and id from Edamam
         urlBuilder.addQueryParameter("app_id", "4dc026e9");
         urlBuilder.addQueryParameter("app_key", "7c6bbd8526153dcbcb3e8d96b46696c6");
@@ -319,10 +316,11 @@ public class MainActivity extends AppCompatActivity {
         // build the url for EDAMAM Search API
 
         HttpUrl.Builder urlBuilder = HttpUrl.parse(EDAMAM_BASE_URL).newBuilder();
+        // just using chicken for now, will having to figure out what constitutes as popular
         urlBuilder.addQueryParameter("q", "chicken");
         // displays 30 results from the query
         urlBuilder.addQueryParameter("from", "0");
-        urlBuilder.addQueryParameter("to","15");
+        urlBuilder.addQueryParameter("to","30");
         // application key and id from Edamam
         urlBuilder.addQueryParameter("app_id", "4dc026e9");
         urlBuilder.addQueryParameter("app_key", "7c6bbd8526153dcbcb3e8d96b46696c6");
@@ -336,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray recipesJSON = response.getJSONArray("hits");
-                            Log.d("Debug", "recipesLength = "+ response.toString());
+
                             for(int i = 0; i < recipesJSON.length();i++) {
                                 // receiving a specific hit
                                 JSONObject recipeJson = recipesJSON.getJSONObject(i);
@@ -357,6 +355,7 @@ public class MainActivity extends AppCompatActivity {
                                 Recipe recipe = new Recipe(title,image,url, ingredientList,calories,servings);
                                 popularRecipes.add(recipe);
                             }
+                            Log.d("Debug", "recipesLength = "+ popularRecipes.size());
 
                         } catch (Exception e) {
                             e.printStackTrace();

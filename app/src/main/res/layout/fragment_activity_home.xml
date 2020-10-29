@@ -78,18 +78,23 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
                 app:layout_constraintTop_toBottomOf="@id/popular_recipes_text">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/popular_recipes_recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:scrollbars="horizontal"
-                    />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/popular_recipes_recyclerview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="140dp"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="horizontal"
+                        android:scrollbars="horizontal" />
+                </RelativeLayout>
             </HorizontalScrollView>
 
             <TextView
@@ -109,17 +114,24 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
                 app:layout_constraintTop_toBottomOf="@id/asian_recipes_text">
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/asian_recipes_recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:scrollbars="horizontal"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/asian_recipes_recyclerview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="140dp"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="horizontal"
+                        android:scrollbars="horizontal" />
+                </RelativeLayout>
             </HorizontalScrollView>
 
             <TextView
@@ -139,17 +151,23 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
                 app:layout_constraintTop_toBottomOf="@id/western_recipes_text">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/western_recipes_recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:scrollbars="horizontal" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/western_recipes_recyclerview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="140dp"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="horizontal"
+                        android:scrollbars="horizontal" />
+                </RelativeLayout>
             </HorizontalScrollView>
 
             <TextView
@@ -169,17 +187,23 @@
                 android:layout_width="0dp"
                 android:layout_height="140dp"
                 android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
                 app:layout_constraintTop_toBottomOf="@id/mediterranean_recipes_text">
 
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mediterranean_recipes_recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="140dp"
-                    android:scrollbars="horizontal"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/mediterranean_recipes_recyclerview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="140dp"
+                        android:nestedScrollingEnabled="true"
+                        android:orientation="horizontal"
+                        android:scrollbars="horizontal" />
+                </RelativeLayout>
             </HorizontalScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
