@@ -26,4 +26,9 @@
     <string name="see_recipes">SEE RECIPES</string>
     <string name="trash">Trash</string>
 
+    <string name="cooking_time">Cooking Time</string>
+    <string name="rating">Rating</string>
+    <string name="meal_type">Meal Type</string>
+    <string name="cuisine">Cuisine</string>
+
 </resources>
