@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.ShoppingListActivity"/>
         <activity android:name=".Activities.HomePageFragment" />
+        <activity android:name=".Activities.RecipeDetailActivity"/>
 
         <activity android:name=".Activities.SignInActivity">
 
