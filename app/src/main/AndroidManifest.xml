@@ -12,16 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.ShoppingListActivity"/>
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.HomePageFragment" />
+        <activity android:name=".Activities.RecipeDetailActivity"/>
 
         <activity android:name=".Activities.SignInActivity">
+
+        </activity>
+        <activity android:name=".Activities.SignUpActivity">
+        </activity>
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.SignUpActivity"/>
     </application>
 
 </manifest>
