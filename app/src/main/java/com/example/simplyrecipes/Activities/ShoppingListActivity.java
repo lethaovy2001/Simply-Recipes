@@ -13,7 +13,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_list);
+        setContentView(R.layout.fragment_shopping_list_layout);
 
         recyclerView = findViewById(R.id.shopping_list_recyclerview);
     }

@@ -29,7 +29,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.ingredient_detail_card_layout, parent, false);
+        View view = inflater.inflate(R.layout.ingredient_pantry_card_layout, parent, false);
 
         return new ViewHolder(view);
     }
