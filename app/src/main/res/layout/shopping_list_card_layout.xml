@@ -26,11 +26,13 @@
                 android:id="@+id/trash_icon"
                 android:layout_width="34dp"
                 android:layout_height="27dp"
-                android:layout_marginEnd="24dp"
                 android:contentDescription="@string/trash"
                 android:onClick="deleteIngredient"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.91"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_trash_24dp" />
 

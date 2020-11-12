@@ -7,13 +7,28 @@ public class Recipe {
     private int recipeID;
     private String title;
     private String image;
+    private double recipeRating;
     private String url;
 
-    public Recipe(int recipeID, String title, String image) {
+    public double getRecipeRating() {
+        return recipeRating;
+    }
+
+    public void setRecipeRating(double recipeRating) {
+        this.recipeRating = recipeRating;
+    }
+
+    public Recipe(int recipeID, String title, String image, double recipeRating) {
         this.recipeID = recipeID;
         this.title = title;
         this.image = image;
+        this.recipeRating = recipeRating;
 
+    }
+    // for storing in recipes in favorites (only need recipeID and recipeName
+    public Recipe(int recipeID, String recipeName) {
+        this.recipeID = recipeID;
+        this.title = recipeName;
     }
 
     public String getTitle() {

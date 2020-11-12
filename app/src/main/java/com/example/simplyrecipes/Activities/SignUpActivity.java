@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -74,6 +75,14 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            // initialize the new user's shopping cart (with an empty value
+                            FirebaseDatabase.getInstance().getReference("Favorites/users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Test ingredient").setValue("id");
+
+                            // initialize the new user's favorite recipes (with an empty value)
+                            FirebaseDatabase.getInstance().getReference("ShoppingList/users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Test_recipe").setValue("id");
                             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                             startActivity(intent);
                             SignUpActivity.this.finish();

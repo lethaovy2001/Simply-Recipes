@@ -51,7 +51,9 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.item_recipe_view_layout, parent, false);
+
         return new ViewHolder(view);
+
     }
 
     @Override
@@ -59,6 +61,7 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.ViewHo
         //binding the data
         holder.recipe_name.setText(recipes.get(position).getTitle());
         Picasso.get().load(recipes.get(position).getImage()).into(holder.recipe_image);
+        holder.rating_val.setText(recipes.get(position).getRecipeRating()+"%");
         holder.recipe_image.setClickable(true);
         holder.recipe_image.setOnClickListener(new View.OnClickListener() {
             @Override

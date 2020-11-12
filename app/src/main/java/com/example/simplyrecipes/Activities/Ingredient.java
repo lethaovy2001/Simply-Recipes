@@ -13,6 +13,11 @@ public class Ingredient {
         this.ingredientCategory = ingredientCategory;
     }
 
+    // for storing ingredients for shopping cart
+    public Ingredient(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
     public int getIngredientID() {
         return ingredientID;
     }

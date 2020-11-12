@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ApplicationClass extends Application {
     private FirebaseAuth mAuth;
+    public static CurrentUser currentUser;
     @Override
     public void onCreate() {
         super.onCreate();

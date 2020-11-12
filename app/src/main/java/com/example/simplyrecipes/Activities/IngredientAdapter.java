@@ -36,9 +36,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
-        holder.ingredient.setText(ingredients.get(position).getIngredientName());
-        holder.category_tv.setText(ingredients.get(position).getIngredientCategory());
-        holder.add_shopping_list_icon.setClickable(true);
+        holder.ingredient.setText(ingredients.get(position).getIngredientAmount()+ " " + ingredients.get(position).getIngredientName());
+        if(ingredients.get(position).getIngredientCategory() != null) {
+            holder.category_tv.setText(ingredients.get(position).getIngredientCategory());
+        }
+        holder.add_shopping_list_icon.setClickable(false); // for now, clicking on it would crash it since there is no viable function for it
         holder.trash_icon.setVisibility(View.INVISIBLE);
     }
 

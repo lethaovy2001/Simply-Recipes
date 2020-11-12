@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,10 +58,10 @@ public class HomePageFragment extends Fragment{
     private ImageView recipe_of_the_week_image;
     private TextView popular_recipes_text;
     private String SPOONACULAR_API_KEY = "d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5";
-    private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=10&limitLicense=false&tags=mediterranean";
+    private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
     private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
     private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
-    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=10&limitLicense=false";
+    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false";
 
     String recipeOfWeekImageUrl = null;
     RecyclerView popularRecyclerView;
@@ -87,6 +89,7 @@ public class HomePageFragment extends Fragment{
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         recipe_of_the_week_image = view.findViewById(R.id.recipe_of_the_week_image);
 
         popularRecyclerView = view.findViewById(R.id.popular_recipes_recyclerview);
@@ -137,6 +140,8 @@ public class HomePageFragment extends Fragment{
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 // response is successful and a JSON object is returned
+                Random rand = new Random(); // placeholder for rating values
+
                 if(response.isSuccessful()) {
                     String responseJSON = response.body().string();
                     try {
@@ -153,12 +158,15 @@ public class HomePageFragment extends Fragment{
                         for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject recipeJSON = jsonArray.getJSONObject(i);
+
                             int recipeId = recipeJSON.getInt("id");
+                            // spoonacular's rating score is not too resourceful, placeholder for now
+                            double rating = getRatings(recipeId) + (rand.nextInt(100-80) + 80);
                             String title = recipeJSON.getString("title");
                             String image = recipeJSON.getString("image");
 
 
-                            Recipe recipe = new Recipe(recipeId, title, image);
+                            Recipe recipe = new Recipe(recipeId, title, image, rating);
                             recipeList.add(recipe);
 
                         }
@@ -200,6 +208,44 @@ public class HomePageFragment extends Fragment{
 
     public String getFragmentTag() {
         return this.Tag;
+    }
+
+    public double getRatings(int recipeID) {
+        final double[] rating_value = new double[1];
+        OkHttpClient client = new OkHttpClient();
+        String urlString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + Integer.toString(recipeID)+ "/information?includeNutrition=true";
+        Request request = new Request.Builder().url(urlString).get()
+                .addHeader("x-rapidapi-key", SPOONACULAR_API_KEY)
+                .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if(response.isSuccessful()) {
+                    // JSON result
+                    String responseJSON = response.body().string();
+
+                    try {
+                        // storing the needed recipe information
+                        JSONObject recipeJSON = new JSONObject(responseJSON);
+
+                        rating_value[0] = recipeJSON.getDouble("spoonacularScore");
+
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                        rating_value[0] = -1;
+                    }
+                }
+            }
+        });
+
+        return rating_value[0];
     }
 
 }
