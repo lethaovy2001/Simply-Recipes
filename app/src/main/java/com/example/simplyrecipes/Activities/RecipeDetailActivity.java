@@ -54,6 +54,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     TextView calories_val;
     TextView rating_val;
     TextView instruction_detail_text;
+    String image_url = ""; // global for firebase access
+    int recipe_time; //global for firebase access
 
     ToggleButton favorite_toggle; // using it as a save button for now
 
@@ -108,15 +110,38 @@ public class RecipeDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 auth = FirebaseAuth.getInstance();
                 db = FirebaseDatabase.getInstance();
-                reference = db.getReference("Favorites/users/"+ auth.getCurrentUser().getUid());
+                reference = db.getReference("users/"+ auth.getCurrentUser().getUid()+"/Favorite");
 
-                reference.child(recipe_name.getText().toString()).setValue(recipeID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                // set up Recipe Name of the recipe
+                reference.child(recipeID+"").child("Recipe Name").setValue(recipe_name.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()) {
-                            Toast.makeText(RecipeDetailActivity.this, recipe_name.getText().toString()+" Successully Saved", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(RecipeDetailActivity.this, recipe_name.getText().toString()+" Failed to Save", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+
+                // set up Recipe Image URL
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Recipe URL").setValue(image_url)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+
+                // set up Recipe Time
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Recipe Time").setValue(recipe_time)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(RecipeDetailActivity.this, "Recipe Saved Successfully", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 });
@@ -155,9 +180,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         // storing the needed recipe information
                         JSONObject recipeJSON = new JSONObject(responseJSON);
                         final String title = recipeJSON.getString("title"); // recipe title
-                        final String image = recipeJSON.getString("image"); // recipe image url
+                        image_url = recipeJSON.getString("image"); // recipe image url
                         final String instructions = recipeJSON.getString("instructions"); //recipe's instructions
-                        final int cooking_time = recipeJSON.getInt("readyInMinutes"); //cooking time
+                        recipe_time = recipeJSON.getInt("readyInMinutes"); //cooking time
 
                         // getting calories (within another JSON array of the JSONobject
                         JSONObject nutritionJSON = new JSONObject(recipeJSON.getString("nutrition"));
@@ -186,10 +211,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Picasso.get().load(image).fit().into(recipe_image);
+                                Picasso.get().load(image_url).fit().into(recipe_image);
                                 recipe_name.setText(title);
                                 instruction_detail_text.setText(instructions);
-                                cooking_time_val.setText(Integer.toString(cooking_time) + " min");
+                                cooking_time_val.setText(Integer.toString(recipe_time) + " min");
                                 calories_val.setText(calories+" calories");
                                 rating_val.setText(Double.toString(rating) + "%");
                                 recipe_detail.setText(detail.text());

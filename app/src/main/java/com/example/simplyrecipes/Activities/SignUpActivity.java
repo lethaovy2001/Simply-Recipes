@@ -76,13 +76,20 @@ public class SignUpActivity extends AppCompatActivity {
                             Log.d("TAG", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            // initialize the new user's shopping cart (with an empty value
-                            FirebaseDatabase.getInstance().getReference("Favorites/users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Test ingredient").setValue("id");
+                            // BEGIN registering new user to the database
+                            // initialize the new user's with Favorite Recipes branch
+                            FirebaseDatabase.getInstance().getReference("users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Favorite")
+                                    .child("none").child("none").setValue("none"); // start with dummy data as firebase won't allow there to be an empty branch
 
-                            // initialize the new user's favorite recipes (with an empty value)
-                            FirebaseDatabase.getInstance().getReference("ShoppingList/users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Test_recipe").setValue("id");
+                            // then the user's pantry
+                            FirebaseDatabase.getInstance().getReference("users/"+FirebaseAuth.getInstance().
+                                    getCurrentUser().getUid())
+                                    .child("Pantry").child("none").setValue("none");
+
+                            // then the shopping list
+                            FirebaseDatabase.getInstance().getReference("users/"+FirebaseAuth.getInstance()
+                                    .getCurrentUser().getUid()).child("Shopping List").child("none").setValue("none");
                             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                             startActivity(intent);
                             SignUpActivity.this.finish();

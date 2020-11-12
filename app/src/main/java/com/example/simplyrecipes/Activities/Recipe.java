@@ -10,6 +10,16 @@ public class Recipe {
     private double recipeRating;
     private String url;
 
+    public String getRecipeTime() {
+        return recipeTime;
+    }
+
+    public void setRecipeTime(String recipeTime) {
+        this.recipeTime = recipeTime;
+    }
+
+    private String recipeTime;
+
     public double getRecipeRating() {
         return recipeRating;
     }
@@ -26,9 +36,10 @@ public class Recipe {
 
     }
     // for storing in recipes in favorites (only need recipeID and recipeName
-    public Recipe(int recipeID, String recipeName) {
+    public Recipe(int recipeID, String recipeName, String image, String recipeTime) {
         this.recipeID = recipeID;
         this.title = recipeName;
+        this.image = image;
     }
 
     public String getTitle() {

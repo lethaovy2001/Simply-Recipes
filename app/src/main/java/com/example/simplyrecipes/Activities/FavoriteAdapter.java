@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simplyrecipes.R;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -34,18 +35,20 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.shopping_list_card_layout, parent, false);
+        View view = inflater.inflate(R.layout.favorite_recipe_card_layout, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteAdapter.ViewHolder holder, final int position) {
-        holder.recipeName.setText(recipes.get(position).getTitle());
-        holder.recipeName.setClickable(true);
-        holder.trash_can_icon.setClickable(true);
+        holder.favorite_recipe_tv.setText(recipes.get(position).getTitle());
+        Picasso.get().load(recipes.get(position).getImage()).into(holder.favorite_recipe_image);
+        holder.favorite_recipe_category.setText(recipes.get(position).getRecipeTime());
+        holder.favorite_trash_icon.setClickable(true);
+        holder.favorite_recipe_image.setClickable(true);
 
-        holder.recipeName.setOnClickListener(new View.OnClickListener() {
+        holder.favorite_recipe_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, RecipeDetailActivity.class);
@@ -63,15 +66,17 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView recipeName;
-        TextView subName;
-        ImageView trash_can_icon;
+        TextView favorite_recipe_tv;
+        TextView favorite_recipe_category;
+        ImageView favorite_trash_icon;
+        ImageView favorite_recipe_image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeName = itemView.findViewById(R.id.ingredient);
-            subName = itemView.findViewById(R.id.category_tv);
+            favorite_recipe_tv = itemView.findViewById(R.id.favorite_recipe_tv);
+            favorite_recipe_category = itemView.findViewById(R.id.favorite_category_tv);
+            favorite_trash_icon = itemView.findViewById(R.id.favorite_trash_icon);
+            favorite_recipe_image = itemView.findViewById(R.id.favorite_recipe_image);
 
-            trash_can_icon = itemView.findViewById(R.id.trash_icon);
         }
     }
 }

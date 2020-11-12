@@ -20,7 +20,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/recipe_image"
+                android:id="@+id/favorite_recipe_image"
                 android:layout_width="80dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="8dp"
@@ -39,14 +39,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@id/recipe_image"
-                app:layout_constraintEnd_toStartOf="@id/trash_icon"
+                app:layout_constraintBottom_toBottomOf="@id/favorite_recipe_image"
+                app:layout_constraintEnd_toStartOf="@id/favorite_trash_icon"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/recipe_image"
-                app:layout_constraintTop_toTopOf="@id/recipe_image">
+                app:layout_constraintStart_toEndOf="@+id/favorite_recipe_image"
+                app:layout_constraintTop_toTopOf="@id/favorite_recipe_image">
 
                 <TextView
-                    android:id="@+id/recipe_tv"
+                    android:id="@+id/favorite_recipe_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Recipe"
@@ -55,7 +55,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/category_tv"
+                    android:id="@+id/favorite_category_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -65,7 +65,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/trash_icon"
+                android:id="@+id/favorite_trash_icon"
                 android:layout_width="34dp"
                 android:layout_height="27dp"
                 android:layout_marginEnd="24dp"

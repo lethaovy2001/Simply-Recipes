@@ -61,7 +61,7 @@ public class HomePageFragment extends Fragment{
     private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
     private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
     private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
-    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false";
+    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false";
 
     String recipeOfWeekImageUrl = null;
     RecyclerView popularRecyclerView;
