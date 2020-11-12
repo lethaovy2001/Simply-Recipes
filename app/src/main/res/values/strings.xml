@@ -25,6 +25,7 @@
     <string name="ingredients">INGREDIENTS</string>
     <string name="see_recipes">SEE RECIPES</string>
     <string name="trash">Trash</string>
+    <string name="recipe">Recipe</string>
 
     <string name="cooking_time">Cooking Time</string>
     <string name="rating">Rating</string>
