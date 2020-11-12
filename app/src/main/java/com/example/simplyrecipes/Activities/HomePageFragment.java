@@ -1,37 +1,22 @@
 package com.example.simplyrecipes.Activities;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.nfc.Tag;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.example.simplyrecipes.R;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +25,6 @@ import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -121,7 +105,7 @@ public class HomePageFragment extends Fragment{
      * @param recipeList // list to store the recipes retrieve the results
      * @param recipeType // indicating what type of the recipe to set up the right recycler view
      */
-    private void extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {
+    public void extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {
         // use client library to set up the GET request
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
