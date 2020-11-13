@@ -149,8 +149,8 @@ public class HomePageFragment extends Fragment{
                             String title = recipeJSON.getString("title");
                             String image = recipeJSON.getString("image");
 
-
-                            Recipe recipe = new Recipe(recipeId, title, image, rating);
+                            // url is empty for now
+                            Recipe recipe = new Recipe(recipeId, title, image, rating, "");
                             recipeList.add(recipe);
 
                         }

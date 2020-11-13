@@ -42,9 +42,18 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteAdapter.ViewHolder holder, final int position) {
-        holder.favorite_recipe_tv.setText(recipes.get(position).getTitle());
-        Picasso.get().load(recipes.get(position).getImage()).into(holder.favorite_recipe_image);
-        holder.favorite_recipe_category.setText(recipes.get(position).getRecipeTime());
+        if(recipes.get(position).getTitle().equals("")) {
+            holder.favorite_recipe_tv.setText("");
+        }else {
+            holder.favorite_recipe_tv.setText(recipes.get(position).getTitle());
+        }
+        if(!recipes.get(position).getImage().equals("")) {
+            Picasso.get().load(recipes.get(position).getImage()).into(holder.favorite_recipe_image);
+        }
+        if(!(recipes.get(position).getRecipeTime() == -1)) {
+            holder.favorite_recipe_category.setText(recipes.get(position).getRecipeTime()+"");
+        }
+
         holder.favorite_trash_icon.setClickable(true);
         holder.favorite_recipe_image.setClickable(true);
 

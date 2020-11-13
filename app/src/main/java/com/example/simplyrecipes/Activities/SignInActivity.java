@@ -31,7 +31,6 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     public FirebaseUser user; // firebase reference to the currently logged in user
     List<Recipe> favoriteRecipes;
-    CurrentUser currentUser;
     DatabaseReference reference;
     EditText loginEmail;
     EditText loginPassword;
@@ -92,7 +91,7 @@ public class SignInActivity extends AppCompatActivity {
                             Log.d("SignIn", "signInWithEmail:success");
                             user = mAuth.getCurrentUser();
                             initializeFavoriteRecipes();
-                            ApplicationClass.currentUser = new CurrentUser(mAuth.getUid(), mAuth.getCurrentUser().getEmail(),favoriteRecipes);
+
                             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
@@ -105,49 +104,9 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-    private void initializeFavoriteRecipes() {
+    public void initializeFavoriteRecipes() {
         int length = 0;
-        reference = FirebaseDatabase.getInstance().getReference("users/"+user.getUid()+"/Favorite");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for(DataSnapshot snap : snapshot.getChildren()) {
-
-                    if(!snap.getKey().toString().equals("none")) {
-                        int recipeID = Integer.parseInt(snap.getKey().toString());
-                        String recipeName = null;
-                        String recipeURL = null;
-                        String recipeTime = null;
-                        for(DataSnapshot ds: snap.getChildren()) {
-                            System.out.println(ds.getKey().toString());
-                            if(ds.getKey().toString().equals("Recipe Name")) {
-                                recipeName = ds.getValue().toString();
-                            }
-                            else if (ds.getKey().toString().equals("Recipe Time")) {
-                                recipeTime = ds.getValue().toString();
-                            }
-                            else if(ds.getKey().toString().equals("Recipe URL")) {
-                                recipeURL = ds.getValue().toString();
-                            }
-                        }
-                        if(recipeID != 0 && recipeName != null && recipeURL != null) {
-                            favoriteRecipes.add(new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime)));
-                        }else {
-                            Log.e("Sign IN Error","Error has occur while loading favorite recipes from database");
-                            return;
-                        }
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("Error" + error.getMessage());
-            }
-        });
     }
 
 }

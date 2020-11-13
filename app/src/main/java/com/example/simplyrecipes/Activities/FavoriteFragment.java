@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteFragment extends Fragment {
@@ -41,37 +42,75 @@ public class FavoriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         auth = FirebaseAuth.getInstance();
         favorite_recipe_recyclerview = view.findViewById(R.id.favorite_recipe_recyclerview);
-        adapter = new FavoriteAdapter(getActivity().getApplicationContext(), ApplicationClass.currentUser.favoriteRecipes);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext()
-                , LinearLayoutManager.HORIZONTAL, false);
-        favorite_recipe_recyclerview.setLayoutManager(layoutManager);
-        favorite_recipe_recyclerview.setAdapter(adapter);
-
-        int length = 0;
-
-
-//        reference = FirebaseDatabase.getInstance().getReference("Favorites/users/"+ auth.getCurrentUser().getUid());
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                System.out.println("Starting count");
-//                int count = 0;
-//                for(DataSnapshot snap : snapshot.getChildren()) {
-//                    System.out.println(snap.getKey().toString());
-//                }
-//                System.out.println(count);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                System.out.println("Error" + error.getMessage());
-//            }
-//        });
+        favoriteRecipes = new ArrayList<>();
+        getFavoriteRecipes();
 
 
     }
 
-    private void getRecipes(int recipeID) {
+    private void getFavoriteRecipes() {
+        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite");
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot snap : snapshot.getChildren()) {
+                    System.out.println(snap.getKey().toString());
+                    if(!snap.getKey().toString().equals("none")) {
+                        int recipeID = Integer.parseInt(snap.getKey().toString());
+                        String recipeName = null;
+                        String recipeURL = null;
+                        String recipeTime = null;
+                        for(DataSnapshot ds: snap.getChildren()) {
+                            if(ds.getKey().toString().equals("Recipe Name")) {
+                                recipeName = ds.getValue().toString();
+                                System.out.println(recipeName.toString());
+                            }
+                            else if (ds.getKey().toString().equals("Recipe Time")) {
+                                recipeTime = ds.getValue().toString();
+                                System.out.println(recipeTime.toString());
+                            }
+                            else if(ds.getKey().toString().equals("Recipe URL")) {
+                                recipeURL = ds.getValue().toString();
+                                System.out.println(recipeURL.toString());
+                            }
+                        }
+                        if(recipeName == null) {
+                            recipeName = "";
+                        }
+                        if(recipeTime == null) {
+                            recipeTime = "-1";
+                        }
+                        if(recipeURL == null) {
+                            recipeURL = "";
+                        }
+                        System.out.println(recipeID+", "+recipeName+", "+ recipeURL+", "+ recipeTime);
+                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime));
+                        favoriteRecipes.add(currRecipe);
+                    }
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter = new FavoriteAdapter(getActivity().getApplicationContext(), favoriteRecipes);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+
+                        favorite_recipe_recyclerview.setLayoutManager(layoutManager);
+                        favorite_recipe_recyclerview.setAdapter(adapter);
+                    }
+                });
+
+
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("Error" + error.getMessage());
+            }
+
+        });
     }
 }

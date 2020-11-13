@@ -9,16 +9,16 @@ public class Recipe {
     private String image;
     private double recipeRating;
     private String url;
+    private int recipeTime;
 
-    public String getRecipeTime() {
-        return recipeTime;
+    public int getRecipeTime() {
+        return this.recipeTime;
     }
 
-    public void setRecipeTime(String recipeTime) {
+    public void setRecipeTime(int recipeTime) {
         this.recipeTime = recipeTime;
     }
 
-    private String recipeTime;
 
     public double getRecipeRating() {
         return recipeRating;
@@ -28,18 +28,21 @@ public class Recipe {
         this.recipeRating = recipeRating;
     }
 
-    public Recipe(int recipeID, String title, String image, double recipeRating) {
+    // for storing recipes in the home page
+    public Recipe(int recipeID, String title, String image, double recipeRating, String url) {
         this.recipeID = recipeID;
         this.title = title;
         this.image = image;
         this.recipeRating = recipeRating;
+        this.url = url;
 
     }
     // for storing in recipes in favorites (only need recipeID and recipeName
-    public Recipe(int recipeID, String recipeName, String image, String recipeTime) {
+    public Recipe(int recipeID, String recipeName, String image, int recipeTime) {
         this.recipeID = recipeID;
         this.title = recipeName;
         this.image = image;
+        this.recipeTime = recipeTime;
     }
 
     public String getTitle() {

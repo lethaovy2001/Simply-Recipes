@@ -108,6 +108,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         favorite_toggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final boolean[] success = {false};
+
                 auth = FirebaseAuth.getInstance();
                 db = FirebaseDatabase.getInstance();
                 reference = db.getReference("users/"+ auth.getCurrentUser().getUid()+"/Favorite");
@@ -141,12 +143,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()) {
                             Toast.makeText(RecipeDetailActivity.this, "Recipe Saved Successfully", Toast.LENGTH_SHORT).show();
-
+                            success[0] = true;
                         }
                     }
                 });
+
+                if(success[0] == true) {
+                    System.out.println("Recipe Saved Successfully");
+                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time);
+                    ApplicationClass.currentUser.favoriteRecipes.add(savedRecipe);
+                }
+
+
             }
+
+
         });
+
+
     }
 
     /**
