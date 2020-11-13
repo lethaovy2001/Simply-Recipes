@@ -1,5 +1,7 @@
 package com.example.simplyrecipes.Activities;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ class HomePageFragmentTest{
     };
     private HomePageFragment hpfrag;
     private List<Recipe> recipeList;
+    @BeforeEach
     public void setUp(){
         hpfrag = new HomePageFragment();
         recipeList = new ArrayList<Recipe>();
@@ -29,7 +32,9 @@ class HomePageFragmentTest{
     public void getFragmentTagTest() throws Exception{
         assertEquals("HomePageFragment", hpfrag.getFragmentTag());
     }
-    public void buildRequestTest() throws Exception{
-
+    @AfterEach
+    public void tearDown() throws Exception{
+        hpfrag = null;
+        recipeList = null;
     }
 }
