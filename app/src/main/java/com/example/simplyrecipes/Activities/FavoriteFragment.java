@@ -1,9 +1,18 @@
 package com.example.simplyrecipes.Activities;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class FavoriteFragment extends Fragment {
 
     FirebaseDatabase db;
@@ -30,6 +40,12 @@ public class FavoriteFragment extends Fragment {
     List<Recipe> favoriteRecipes;
     RecyclerView favorite_recipe_recyclerview;
     FavoriteAdapter adapter;
+    ToggleButton mealTypeToggleBtn, cuisineToggleBtn, cookingTimeToggleBtn, ratingToggleBtn;
+    TextView selectFilterTextView;
+    ImageView exitFilterPopupImageView;
+    PopupWindow popupWindow;
+    Button applyFilterButton;
+
 
     @Nullable
     @Override
@@ -42,10 +58,13 @@ public class FavoriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         auth = FirebaseAuth.getInstance();
         favorite_recipe_recyclerview = view.findViewById(R.id.favorite_recipe_recyclerview);
+        mealTypeToggleBtn = view.findViewById(R.id.meal_type_toggle_btn);
+        cuisineToggleBtn = view.findViewById(R.id.cuisine_btn);
+        cookingTimeToggleBtn = view.findViewById(R.id.cooking_time_btn);
+        ratingToggleBtn = view.findViewById(R.id.rating_btn);
         favoriteRecipes = new ArrayList<>();
         getFavoriteRecipes();
-
-
+        addListenerOnToggleButtonClick();
     }
 
     private void getFavoriteRecipes() {
@@ -102,10 +121,7 @@ public class FavoriteFragment extends Fragment {
                         favorite_recipe_recyclerview.setAdapter(adapter);
                     }
                 });
-
-
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -113,5 +129,66 @@ public class FavoriteFragment extends Fragment {
             }
 
         });
+    }
+
+    public void addListenerOnToggleButtonClick(){
+        mealTypeToggleBtn.setOnCheckedChangeListener(handleOnClick(mealTypeToggleBtn));
+        cuisineToggleBtn.setOnCheckedChangeListener(handleOnClick(cuisineToggleBtn));
+        ratingToggleBtn.setOnCheckedChangeListener(handleOnClick(ratingToggleBtn));
+        cookingTimeToggleBtn.setOnCheckedChangeListener(handleOnClick(cookingTimeToggleBtn));
+    }
+
+    CompoundButton.OnCheckedChangeListener handleOnClick(final ToggleButton button) {
+        return new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    showPopupFilter(buttonView);
+                } else {
+
+                }
+            }
+        };
+    }
+
+    public void showPopupFilter(final CompoundButton view) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View popupView = inflater.inflate(R.layout.filter_popup_layout, null);
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        popupWindow = new PopupWindow(popupView, width, height, focusable);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
+        exitFilterPopupImageView = popupView.findViewById(R.id.exit_button);
+        applyFilterButton = popupView.findViewById(R.id.apply_filter_button);
+
+        exitFilterPopupImageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindow.dismiss();
+                return true;
+            }
+        });
+
+        applyFilterButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                view.setChecked(true);
+                popupWindow.dismiss();
+                return true;
+            }
+        });
+
+        if (view.equals(mealTypeToggleBtn)) {
+            selectFilterTextView.setText("Select Meal Type");
+        } else if (view.equals(cookingTimeToggleBtn)) {
+            selectFilterTextView.setText("Select Cooking Time");
+        } else if (view.equals(cuisineToggleBtn)) {
+            selectFilterTextView.setText("Select Cuisine");
+        } else if (view.equals(ratingToggleBtn)) {
+            selectFilterTextView.setText("Select Rating");
+        }
     }
 }
