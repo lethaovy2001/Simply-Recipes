@@ -29,10 +29,13 @@ public class ShoppingListFragment extends Fragment {
     List<Ingredient> shoppingListIngredients;
     ShoppingListAdapter adapter;
     RecyclerView shopping_list_recyclerview;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_list_layout, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_list_layout, container, false);
+        return view;
     }
 
     @Override
@@ -47,28 +50,29 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void getShoppingList() {
-        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Shopping List");
+        reference =
+                FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Shopping List");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 shoppingListIngredients.clear();
-                for(DataSnapshot snap: snapshot.getChildren()) {
-                    if(!snap.getKey().toString().equals("none")) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
+                    if (!snap.getKey().toString().equals("none")) {
 
                         int ingredientId = Integer.parseInt(snap.getKey());
                         String ingredientName = null;
                         String ingredientCategory = null;
-                        for(DataSnapshot ds: snap.getChildren()) {
+                        for (DataSnapshot ds : snap.getChildren()) {
 
-                            if(ds.getKey().equals("Ingredient Name")) {
+                            if (ds.getKey().equals("Ingredient Name")) {
                                 ingredientName = ds.getValue().toString();
-                            }
-                            else if(ds.getKey().equals("Ingredient Category")) {
+                            } else if (ds.getKey().equals("Ingredient Category")) {
                                 ingredientCategory = ds.getValue().toString();
                             }
                         }
-                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName, ingredientCategory);
+                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName,
+                                ingredientCategory);
                         shoppingListIngredients.add(ingredient);
                     }
                 }
@@ -76,8 +80,10 @@ public class ShoppingListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), shoppingListIngredients);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+                        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(),
+                                shoppingListIngredients);
+                        LinearLayoutManager layoutManager =
+                                new LinearLayoutManager(getActivity().getApplicationContext());
                         shopping_list_recyclerview.setLayoutManager(layoutManager);
                         shopping_list_recyclerview.setAdapter(adapter);
                     }

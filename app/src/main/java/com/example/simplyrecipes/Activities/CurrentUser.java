@@ -13,4 +13,16 @@ public class CurrentUser {
         this.favoriteRecipes = favoriteRecipes;
         //this.shoppingList = shoppingList;
     }
+
+    public String getUserUID() {
+        return this.userUID;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public List<Recipe> getFavoriteRecipes() {
+        return this.favoriteRecipes;
+    }
 }

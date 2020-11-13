@@ -97,16 +97,15 @@ public class HomePageFragment extends Fragment{
     }
 
 
-
-
     /**
      *
      * @param urlString // api url string to search recipes
      * @param recipeList // list to store the recipes retrieve the results
      * @param recipeType // indicating what type of the recipe to set up the right recycler view
      */
-    public void extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {
+    public boolean extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {
         // use client library to set up the GET request
+        final boolean[] isSuccesful = {true};
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(urlString).get()
@@ -156,6 +155,9 @@ public class HomePageFragment extends Fragment{
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
+                    if(recipeList.size() <= 0) {
+                        isSuccesful[0] = false;
+                    }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -186,6 +188,7 @@ public class HomePageFragment extends Fragment{
                 }
             }
         });
+        return isSuccesful[0];
     }
 
 

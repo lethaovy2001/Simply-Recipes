@@ -1,0 +1,549 @@
+Index: app/src/main/java/com/example/simplyrecipes/Activities/ShoppingListFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.simplyrecipes.Activities;\r\n\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.simplyrecipes.R;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class ShoppingListFragment extends Fragment {\r\n    FirebaseAuth auth;\r\n    DatabaseReference reference;\r\n    List<Ingredient> shoppingListIngredients;\r\n    ShoppingListAdapter adapter;\r\n    RecyclerView shopping_list_recyclerview;\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        return inflater.inflate(R.layout.fragment_shopping_list_layout, container, false);\r\n    }\r\n\r\n    @Override\r\n    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {\r\n\r\n        super.onViewCreated(view, savedInstanceState);\r\n        auth = FirebaseAuth.getInstance();\r\n        shoppingListIngredients = new ArrayList<>();\r\n        shopping_list_recyclerview = view.findViewById(R.id.shopping_list_recyclerview);\r\n        getShoppingList();\r\n\r\n    }\r\n\r\n    private void getShoppingList() {\r\n        reference = FirebaseDatabase.getInstance().getReference(\"users/\"+auth.getCurrentUser().getUid()+\"/Shopping List\");\r\n\r\n        reference.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                for(DataSnapshot snap: snapshot.getChildren()) {\r\n                    if(!snap.getKey().toString().equals(\"none\")) {\r\n                        System.out.println(snap.getKey().toString());\r\n                        int ingredientId = Integer.parseInt(snap.getKey());\r\n                        String ingredientName = null;\r\n                        String ingredientCategory = null;\r\n                        for(DataSnapshot ds: snap.getChildren()) {\r\n                            System.out.println(ds.getKey().toString());\r\n                            if(ds.getKey().equals(\"Ingredient Name\")) {\r\n                                ingredientName = ds.getValue().toString();\r\n                            }\r\n                            else if(ds.getKey().equals(\"Ingredient Category\")) {\r\n                                ingredientCategory = ds.getValue().toString();\r\n                            }\r\n                        }\r\n                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName, ingredientCategory);\r\n                        shoppingListIngredients.add(ingredient);\r\n                    }\r\n                }\r\n\r\n                getActivity().runOnUiThread(new Runnable() {\r\n                    @Override\r\n                    public void run() {\r\n                        System.out.println(shoppingListIngredients.get(1).getIngredientName());\r\n                        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), shoppingListIngredients);\r\n                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());\r\n                        shopping_list_recyclerview.setLayoutManager(layoutManager);\r\n                        shopping_list_recyclerview.setAdapter(adapter);\r\n                    }\r\n                });\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n                Log.d(\"error\", error.getMessage());\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/ShoppingListFragment.java	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/java/com/example/simplyrecipes/Activities/ShoppingListFragment.java	(date 1605241232184)
+@@ -29,10 +29,13 @@
+     List<Ingredient> shoppingListIngredients;
+     ShoppingListAdapter adapter;
+     RecyclerView shopping_list_recyclerview;
++
+     @Nullable
+     @Override
+-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+-        return inflater.inflate(R.layout.fragment_shopping_list_layout, container, false);
++    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
++                             @Nullable Bundle savedInstanceState) {
++        View view = inflater.inflate(R.layout.fragment_shopping_list_layout, container, false);
++        return view;
+     }
+ 
+     @Override
+@@ -47,27 +50,28 @@
+     }
+ 
+     private void getShoppingList() {
+-        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Shopping List");
++        reference =
++                FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Shopping List");
+ 
+         reference.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot snapshot) {
+-                for(DataSnapshot snap: snapshot.getChildren()) {
+-                    if(!snap.getKey().toString().equals("none")) {
++                for (DataSnapshot snap : snapshot.getChildren()) {
++                    if (!snap.getKey().toString().equals("none")) {
+                         System.out.println(snap.getKey().toString());
+                         int ingredientId = Integer.parseInt(snap.getKey());
+                         String ingredientName = null;
+                         String ingredientCategory = null;
+-                        for(DataSnapshot ds: snap.getChildren()) {
++                        for (DataSnapshot ds : snap.getChildren()) {
+                             System.out.println(ds.getKey().toString());
+-                            if(ds.getKey().equals("Ingredient Name")) {
++                            if (ds.getKey().equals("Ingredient Name")) {
+                                 ingredientName = ds.getValue().toString();
+-                            }
+-                            else if(ds.getKey().equals("Ingredient Category")) {
++                            } else if (ds.getKey().equals("Ingredient Category")) {
+                                 ingredientCategory = ds.getValue().toString();
+                             }
+                         }
+-                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName, ingredientCategory);
++                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName,
++                                ingredientCategory);
+                         shoppingListIngredients.add(ingredient);
+                     }
+                 }
+@@ -76,8 +80,10 @@
+                     @Override
+                     public void run() {
+                         System.out.println(shoppingListIngredients.get(1).getIngredientName());
+-                        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), shoppingListIngredients);
+-                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
++                        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(),
++                                shoppingListIngredients);
++                        LinearLayoutManager layoutManager =
++                                new LinearLayoutManager(getActivity().getApplicationContext());
+                         shopping_list_recyclerview.setLayoutManager(layoutManager);
+                         shopping_list_recyclerview.setAdapter(adapter);
+                     }
+Index: app/src/main/java/com/example/simplyrecipes/Activities/IngredientAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.simplyrecipes.Activities;\r\n\r\nimport android.content.Context;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.simplyrecipes.R;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\nimport java.util.List;\r\n\r\npublic class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {\r\n    LayoutInflater inflater;\r\n    List<Ingredient> ingredients;\r\n    private Context context;\r\n    DatabaseReference reference;\r\n    FirebaseAuth auth;\r\n\r\n\r\n\r\n    public IngredientAdapter(Context context, List<Ingredient> ingredients) {\r\n        this.inflater = LayoutInflater.from(context);\r\n        this.ingredients = ingredients;\r\n        this.context = context;\r\n    }\r\n\r\n\r\n    @NonNull\r\n    @Override\r\n    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view = inflater.inflate(R.layout.ingredient_card_recipe_detail_layout, parent, false);\r\n\r\n        return new ViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, final int position) {\r\n\r\n        holder.ingredient_recipe_card.setText(ingredients.get(position).getIngredientAmount()+\r\n                \" \" + ingredients.get(position).getIngredientName());\r\n        holder.add_ingredient_icon.setVisibility(View.VISIBLE);\r\n        holder.add_ingredient_icon.setClickable(true);\r\n        holder.add_ingredient_icon.setOnClickListener(new View.OnClickListener() {\r\n\r\n            @Override\r\n            public void onClick(View view) {\r\n                auth = FirebaseAuth.getInstance();\r\n                reference = FirebaseDatabase.getInstance()\r\n                        .getReference(\"users/\"+auth.getCurrentUser().getUid()+\"/Shopping List\");\r\n\r\n                // check if the ingredient exist in the shopping cart already\r\n                reference.equalTo(ingredients.get(position).getIngredientID())\r\n                        .addValueEventListener(new ValueEventListener() {\r\n                    @Override\r\n                    public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                        if(snapshot.child(ingredients.get(position).getIngredientID()+\"\").exists()) {\r\n                            ingredients.get(position).setInShoppingCart(true);\r\n                            Toast.makeText(context, \"This ingredient already exist in the cart\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n\r\n                    @Override\r\n                    public void onCancelled(@NonNull DatabaseError error) {\r\n\r\n                    }\r\n                });\r\n                if(ingredients.get(position).isInShoppingCart() == false) {\r\n                    // set up the ingredient id and ingredient name\r\n                    reference.child(ingredients.get(position).getIngredientID()+\"\").child(\"Ingredient Name\").setValue(ingredients.get(position).getIngredientName())\r\n                            .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                        @Override\r\n                        public void onComplete(@NonNull Task<Void> task) {\r\n                            if(task.isSuccessful()) {\r\n\r\n                            }\r\n                        }\r\n                    });\r\n\r\n                    // set up the ingredient category\r\n                    reference = FirebaseDatabase.getInstance()\r\n                            .getReference(\"users/\"+auth.getCurrentUser().getUid()+\"/Shopping List/\"+ingredients.get(position).getIngredientID());\r\n                    reference.child(\"Ingredient Category\").setValue(ingredients.get(position)\r\n                            .getIngredientCategory()).addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                        @Override\r\n                        public void onComplete(@NonNull Task<Void> task) {\r\n                            if(task.isSuccessful()) {\r\n                                Toast.makeText(context, \"Successfully added ingredient to shopping cart!\", Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n\r\n\r\n        });\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return ingredients.size();\r\n    }\r\n\r\n    public class ViewHolder extends RecyclerView.ViewHolder {\r\n        TextView ingredient_recipe_card;\r\n        ImageView add_ingredient_icon;\r\n        public ViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            ingredient_recipe_card = itemView.findViewById(R.id.ingredient_recipe_card);\r\n            add_ingredient_icon = itemView.findViewById(R.id.add_ingredient_icon);\r\n        }\r\n    }\r\n\r\n\r\n}\r\n
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/IngredientAdapter.java	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/java/com/example/simplyrecipes/Activities/RecipeDetailIngredientAdapter.java	(date 1605241689654)
+@@ -23,7 +23,7 @@
+ 
+ import java.util.List;
+ 
+-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
++public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDetailIngredientAdapter.ViewHolder> {
+     LayoutInflater inflater;
+     List<Ingredient> ingredients;
+     private Context context;
+@@ -32,7 +32,7 @@
+ 
+ 
+ 
+-    public IngredientAdapter(Context context, List<Ingredient> ingredients) {
++    public RecipeDetailIngredientAdapter(Context context, List<Ingredient> ingredients) {
+         this.inflater = LayoutInflater.from(context);
+         this.ingredients = ingredients;
+         this.context = context;
+@@ -48,7 +48,7 @@
+     }
+ 
+     @Override
+-    public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, final int position) {
++    public void onBindViewHolder(@NonNull RecipeDetailIngredientAdapter.ViewHolder holder, final int position) {
+ 
+         holder.ingredient_recipe_card.setText(ingredients.get(position).getIngredientAmount()+
+                 " " + ingredients.get(position).getIngredientName());
+Index: app/src/main/res/layout/recipe_detail_page.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:layout_centerHorizontal=\"true\"\r\n    android:clickable=\"false\"\r\n    android:elevation=\"4dp\">\r\n\r\n\r\n    <androidx.core.widget.NestedScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:fillViewport=\"true\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.0\">\r\n\r\n        <androidx.constraintlayout.widget.ConstraintLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\">\r\n\r\n            <androidx.constraintlayout.widget.Guideline\r\n                android:id=\"@+id/guideline_vertical_left_margin\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"vertical\"\r\n                app:layout_constraintGuide_begin=\"20dp\" />\r\n\r\n            <androidx.constraintlayout.widget.Guideline\r\n                android:id=\"@+id/guideline_vertical_right_margin\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"vertical\"\r\n                app:layout_constraintGuide_end=\"20dp\" />\r\n\r\n            <ImageView\r\n                android:id=\"@+id/recipe_image\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"240dp\"\r\n                android:scaleType=\"centerCrop\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintHorizontal_bias=\"0.0\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n            <androidx.cardview.widget.CardView xmlns:card_view=\"http://schemas.android.com/apk/res-auto\"\r\n                android:id=\"@+id/favorite_toggle_card_container\"\r\n                android:layout_width=\"20dp\"\r\n                android:layout_height=\"20dp\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:layout_marginEnd=\"15dp\"\r\n                android:elevation=\"2dp\"\r\n                app:cardCornerRadius=\"10dp\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\"\r\n                card_view:cardBackgroundColor=\"#98FFFFFF\">\r\n\r\n                <ToggleButton\r\n                    android:id=\"@+id/favorite_toggle\"\r\n                    android:layout_width=\"16dp\"\r\n                    android:layout_height=\"16dp\"\r\n                    android:layout_gravity=\"center\"\r\n                    android:layout_marginTop=\"1dp\"\r\n                    android:background=\"@drawable/toggle_selector\"\r\n                    android:textOff=\"@null\"\r\n                    android:textOn=\"@null\" />\r\n\r\n\r\n            </androidx.cardview.widget.CardView>\r\n\r\n\r\n            <TextView\r\n                android:id=\"@+id/recipe_name\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:text=\"Phở is life\"\r\n                android:textColor=\"@color/colorBlack\"\r\n                android:textSize=\"20sp\"\r\n                android:textStyle=\"bold\"\r\n                app:layout_constraintEnd_toEndOf=\"@id/guideline_vertical_right_margin\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/recipe_image\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/recipe_detail\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:text=\"this is a simple recipe to cure your hunger. very simple to make ?\"\r\n                android:textSize=\"16sp\"\r\n                app:layout_constraintEnd_toEndOf=\"@id/guideline_vertical_right_margin\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/recipe_name\"\r\n\r\n                />\r\n\r\n\r\n            <LinearLayout\r\n                android:id=\"@+id/linear_properties_layout\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:gravity=\"center\"\r\n                android:orientation=\"horizontal\"\r\n                app:layout_constraintEnd_toEndOf=\"@id/guideline_vertical_right_margin\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/recipe_detail\"\r\n                tools:layout_editor_absoluteX=\"1dp\"\r\n                tools:layout_editor_absoluteY=\"363dp\">\r\n\r\n                <androidx.constraintlayout.widget.ConstraintLayout\r\n                    android:id=\"@+id/time_constraint_layout\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\">\r\n\r\n                    <androidx.cardview.widget.CardView\r\n                        android:id=\"@+id/cooking_time_icon\"\r\n                        android:layout_width=\"50dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:outlineAmbientShadowColor=\"#26BF5AF2\"\r\n                        android:outlineSpotShadowColor=\"#26BF5AF2\"\r\n                        app:cardBackgroundColor=\"#26BF5AF2\"\r\n                        app:cardCornerRadius=\"25dp\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n                        <ImageView\r\n                            android:layout_width=\"wrap_content\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:src=\"@drawable/ic_baseline_access_time_24_purple\" />\r\n\r\n                    </androidx.cardview.widget.CardView>\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/cooking_time_val\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"5dp\"\r\n                        android:text=\"1 year\"\r\n                        android:textSize=\"10sp\"\r\n                        android:textStyle=\"bold\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@id/cooking_time_icon\" />\r\n\r\n                </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n\r\n                <androidx.constraintlayout.widget.ConstraintLayout\r\n                    android:id=\"@+id/calories_constraint_layout\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\">\r\n\r\n                    <androidx.cardview.widget.CardView\r\n                        android:id=\"@+id/calories_icon\"\r\n                        android:layout_width=\"50dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:outlineAmbientShadowColor=\"#26FF0A0A\"\r\n                        android:outlineSpotShadowColor=\"#26FF0A0A\"\r\n                        app:cardBackgroundColor=\"#26FF0A0A\"\r\n                        app:cardCornerRadius=\"25dp\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n                        <ImageView\r\n                            android:layout_width=\"wrap_content\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:src=\"@drawable/ic_local_fire_24dp\" />\r\n\r\n\r\n                    </androidx.cardview.widget.CardView>\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/calories_val\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"5dp\"\r\n                        android:text=\"9999 calories\"\r\n                        android:textSize=\"10sp\"\r\n                        android:textStyle=\"bold\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@id/calories_icon\" />\r\n\r\n                </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n                <androidx.constraintlayout.widget.ConstraintLayout\r\n                    android:id=\"@+id/rating_constraint_layout\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_weight=\"1\">\r\n\r\n                    <androidx.cardview.widget.CardView\r\n                        android:id=\"@+id/rating_icon\"\r\n                        android:layout_width=\"50dp\"\r\n                        android:layout_height=\"50dp\"\r\n                        android:elevation=\"4dp\"\r\n                        android:outlineAmbientShadowColor=\"#26FFD60A\"\r\n                        android:outlineSpotShadowColor=\"#26FFD60A\"\r\n                        app:cardBackgroundColor=\"#26FFD60A\"\r\n                        app:cardCornerRadius=\"25dp\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n                        <ImageView\r\n                            android:layout_width=\"wrap_content\"\r\n                            android:layout_height=\"wrap_content\"\r\n                            android:layout_gravity=\"center\"\r\n                            android:src=\"@drawable/ic_baseline_star_24_yellow\" />\r\n\r\n                    </androidx.cardview.widget.CardView>\r\n\r\n                    <TextView\r\n                        android:id=\"@+id/rating_val\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_marginTop=\"5dp\"\r\n                        android:text=\"3 michelin star\"\r\n                        android:textSize=\"10sp\"\r\n                        android:textStyle=\"bold\"\r\n                        app:layout_constraintEnd_toEndOf=\"parent\"\r\n                        app:layout_constraintHorizontal_bias=\"0.5\"\r\n                        app:layout_constraintStart_toStartOf=\"parent\"\r\n                        app:layout_constraintTop_toBottomOf=\"@id/rating_icon\" />\r\n\r\n                </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n            </LinearLayout>\r\n\r\n            <TextView\r\n                android:id=\"@+id/ingredient_list_text\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:text=\"Ingredients\"\r\n                android:textColor=\"@color/colorPrimary\"\r\n                android:textSize=\"16sp\"\r\n                android:textStyle=\"bold\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/linear_properties_layout\" />\r\n\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/ingredient_list_recycler_view\"\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:nestedScrollingEnabled=\"false\"\r\n                app:layout_constraintEnd_toEndOf=\"@id/guideline_vertical_right_margin\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/ingredient_list_text\" />\r\n\r\n\r\n            <TextView\r\n                android:id=\"@+id/instruction_text\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"15dp\"\r\n                android:text=\"Instructions\"\r\n                android:textColor=\"@color/colorPrimary\"\r\n                android:textSize=\"16sp\"\r\n                android:textStyle=\"bold\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/ingredient_list_recycler_view\" />\r\n\r\n            <!--TODO implement API connection-->\r\n            <TextView\r\n                android:id=\"@+id/instruction_detail_text\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"5dp\"\r\n                android:text=\"STEP 1: Preheat your pot at 1000F \\nSTEP 2: BURN EVERYTHING DOWN\"\r\n                app:layout_constraintStart_toStartOf=\"@id/guideline_vertical_left_margin\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/instruction_text\" />\r\n        </androidx.constraintlayout.widget.ConstraintLayout>\r\n    </androidx.core.widget.NestedScrollView>\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/recipe_detail_page.xml	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/res/layout/recipe_detail_page.xml	(date 1605238799250)
+@@ -283,11 +283,12 @@
+             <!--TODO implement API connection-->
+             <TextView
+                 android:id="@+id/instruction_detail_text"
+-                android:layout_width="wrap_content"
++                android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="5dp"
+-                android:text="STEP 1: Preheat your pot at 1000F \nSTEP 2: BURN EVERYTHING DOWN"
++                android:text=""
+                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
++                app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
+                 app:layout_constraintTop_toBottomOf="@id/instruction_text" />
+         </androidx.constraintlayout.widget.ConstraintLayout>
+     </androidx.core.widget.NestedScrollView>
+Index: app/src/main/res/layout/ingredient_pantry_card_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:layout_marginLeft=\"4dp\"\r\n    android:layout_marginTop=\"4dp\"\r\n    android:layout_marginEnd=\"4dp\"\r\n    android:layout_marginRight=\"4dp\">\r\n\r\n    <androidx.cardview.widget.CardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\">\r\n\r\n        <androidx.constraintlayout.widget.ConstraintLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\">\r\n\r\n\r\n            <!-- TODO implement function inside .java class -->\r\n\r\n            <ImageView\r\n                android:id=\"@+id/trash_icon\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginEnd=\"24dp\"\r\n                android:contentDescription=\"@string/trash\"\r\n                android:onClick=\"deleteIngredient\"\r\n                android:src=\"@drawable/ic_trash_24dp\"\r\n                app:layout_constraintBottom_toBottomOf=\"parent\"\r\n                app:layout_constraintEnd_toEndOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n            <!-- TODO implement function inside .java class -->\r\n\r\n            <ImageView\r\n                android:id=\"@+id/add_shopping_list_icon\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginEnd=\"20dp\"\r\n                android:onClick=\"addToShoppingList\"\r\n                android:src=\"@drawable/ic_iconmonstr_shopping_cart_add\"\r\n                app:layout_constraintBottom_toBottomOf=\"parent\"\r\n                app:layout_constraintEnd_toStartOf=\"@id/trash_icon\"\r\n                app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/ingredient\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginStart=\"16dp\"\r\n                android:layout_marginTop=\"3dp\"\r\n                android:layout_marginBottom=\"6dp\"\r\n                android:text=\"Tomato\"\r\n                android:textColor=\"@color/colorHeading\"\r\n                android:textSize=\"14sp\"\r\n                android:textStyle=\"bold\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toTopOf=\"parent\"\r\n                app:layout_constraintVertical_bias=\"1.0\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/category_tv\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginVertical=\"3dp\"\r\n                android:layout_marginStart=\"16dp\"\r\n                android:layout_marginBottom=\"3dp\"\r\n                android:text=\"Vegetables\"\r\n                android:textSize=\"11sp\"\r\n                app:layout_constraintBottom_toBottomOf=\"parent\"\r\n                app:layout_constraintStart_toStartOf=\"parent\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/ingredient\" />\r\n\r\n        </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    </androidx.cardview.widget.CardView>\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/ingredient_pantry_card_layout.xml	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/res/layout/ingredient_pantry_card_layout.xml	(date 1605243786000)
+@@ -24,8 +24,8 @@
+ 
+             <ImageView
+                 android:id="@+id/trash_icon"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
++                android:layout_width="24dp"
++                android:layout_height="24dp"
+                 android:layout_marginEnd="24dp"
+                 android:contentDescription="@string/trash"
+                 android:onClick="deleteIngredient"
+@@ -38,8 +38,8 @@
+ 
+             <ImageView
+                 android:id="@+id/add_shopping_list_icon"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
++                android:layout_width="24dp"
++                android:layout_height="24dp"
+                 android:layout_marginEnd="20dp"
+                 android:onClick="addToShoppingList"
+                 android:src="@drawable/ic_iconmonstr_shopping_cart_add"
+@@ -48,7 +48,7 @@
+                 app:layout_constraintTop_toTopOf="parent" />
+ 
+             <TextView
+-                android:id="@+id/ingredient"
++                android:id="@+id/ingredient_name"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+@@ -73,7 +73,7 @@
+                 android:textSize="11sp"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+-                app:layout_constraintTop_toBottomOf="@id/ingredient" />
++                app:layout_constraintTop_toBottomOf="@id/ingredient_name" />
+ 
+         </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+Index: app/src/main/java/com/example/simplyrecipes/Activities/HomePageFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.simplyrecipes.Activities;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.example.simplyrecipes.R;\r\n\r\nimport org.jetbrains.annotations.NotNull;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Random;\r\n\r\nimport okhttp3.Call;\r\nimport okhttp3.Callback;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.Response;\r\n\r\n/**\r\n * Fragment for the Home Page\r\n * Handles loading different recipes from the EDAMAM API\r\n *\r\n * @author William Lai, Dung Vo\r\n * @version 2.0\r\n */\r\n\r\npublic class HomePageFragment extends Fragment{\r\n    private static final String Tag = \"HomePageFragment\";\r\n    private ImageView recipe_of_the_week_image;\r\n    private TextView popular_recipes_text;\r\n    private String SPOONACULAR_API_KEY = \"d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5\";\r\n    private static final String MEDITTERANIAN_URL = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean\";\r\n    private static final String ASIAN_URL = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true\";\r\n    private static final String WESTERN_URL = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true\";\r\n    private static final String POPULAR_URL = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false\";\r\n\r\n    String recipeOfWeekImageUrl = null;\r\n    RecyclerView popularRecyclerView;\r\n    RecyclerView asianRecyclerView;\r\n    RecyclerView westernRecyclerView;\r\n    RecyclerView mediterraneanRecyclerView;\r\n\r\n    List<Recipe> popularRecipes;\r\n    List<Recipe> asianRecipes;\r\n    List<Recipe> westernRecipes;\r\n    List<Recipe> mediterraneanRecipes;\r\n\r\n    HomePageAdapter popularAdapter;\r\n    HomePageAdapter asianAdapter;\r\n    HomePageAdapter westernAdapter;\r\n    HomePageAdapter mediterraneanAdapter;\r\n\r\n\r\n\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_activity_home, container, false);\r\n        return view;\r\n    }\r\n\r\n    public void onViewCreated(View view, Bundle savedInstanceState) {\r\n        super.onViewCreated(view, savedInstanceState);\r\n        recipe_of_the_week_image = view.findViewById(R.id.recipe_of_the_week_image);\r\n\r\n        popularRecyclerView = view.findViewById(R.id.popular_recipes_recyclerview);\r\n        popularRecipes = new ArrayList<>();\r\n\r\n        asianRecyclerView = view.findViewById(R.id.asian_recipes_recyclerview);\r\n        asianRecipes = new ArrayList<>();\r\n\r\n        westernRecyclerView = view.findViewById(R.id.western_recipes_recyclerview);\r\n        westernRecipes = new ArrayList<>();\r\n\r\n        mediterraneanRecyclerView = view.findViewById(R.id.mediterranean_recipes_recyclerview);\r\n        mediterraneanRecipes = new ArrayList<>();\r\n\r\n//        extractRecipes(MEDITTERANIAN_URL,mediterraneanRecipes, \"Meditteranean\");\r\n//        extractRecipes(ASIAN_URL, asianRecipes, \"Asian\");\r\n//        extractRecipes(WESTERN_URL, westernRecipes, \"Western\");\r\n        extractRecipes(POPULAR_URL, popularRecipes, \"Popular\");\r\n\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n    /**\r\n     *\r\n     * @param urlString // api url string to search recipes\r\n     * @param recipeList // list to store the recipes retrieve the results\r\n     * @param recipeType // indicating what type of the recipe to set up the right recycler view\r\n     */\r\n    public void extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {\r\n        // use client library to set up the GET request\r\n        OkHttpClient client = new OkHttpClient();\r\n        Request request = new Request.Builder()\r\n                .url(urlString).get()\r\n                .addHeader(\"x-rapidapi-key\", SPOONACULAR_API_KEY)\r\n                .addHeader(\"x-rapidapi-host\", \"spoonacular-recipe-food-nutrition-v1.p.rapidapi.com\")\r\n                .build();\r\n\r\n        // call the api's url\r\n        client.newCall(request).enqueue(new Callback() {\r\n            @Override\r\n            public void onFailure(@NotNull Call call, @NotNull IOException e) {\r\n                e.printStackTrace();\r\n            }\r\n\r\n            @Override\r\n            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {\r\n                // response is successful and a JSON object is returned\r\n                Random rand = new Random(); // placeholder for rating values\r\n\r\n                if(response.isSuccessful()) {\r\n                    String responseJSON = response.body().string();\r\n                    try {\r\n                        JSONObject jsonObject = new JSONObject(responseJSON);\r\n                        JSONArray jsonArray = null;\r\n                        if(recipeType.equals(\"Meditteranean\") || recipeType.equals(\"Popular\")) {\r\n                            jsonArray = jsonObject.getJSONArray(\"recipes\");\r\n                        }else {\r\n                            jsonArray = jsonObject.getJSONArray(\"results\");\r\n                        }\r\n                        // get the list of the recipe results from the GET request\r\n\r\n                        // traverse through the recipes and store them in a recipe list\r\n                        for(int i = 0; i < jsonArray.length(); i++) {\r\n\r\n                            JSONObject recipeJSON = jsonArray.getJSONObject(i);\r\n\r\n                            int recipeId = recipeJSON.getInt(\"id\");\r\n                            // spoonacular's rating score is not too resourceful, placeholder for now\r\n                            double rating = getRatings(recipeId) + (rand.nextInt(100-80) + 80);\r\n                            String title = recipeJSON.getString(\"title\");\r\n                            String image = recipeJSON.getString(\"image\");\r\n\r\n                            // url is empty for now\r\n                            Recipe recipe = new Recipe(recipeId, title, image, rating, \"\");\r\n                            recipeList.add(recipe);\r\n                        }\r\n                    } catch(Exception e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                    getActivity().runOnUiThread(new Runnable() {\r\n                        @Override\r\n                        public void run() {\r\n                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);\r\n                            switch(recipeType) {\r\n                                case \"Asian\":\r\n                                    asianRecyclerView.setLayoutManager(layoutManager);\r\n                                    asianAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);\r\n                                    asianRecyclerView.setAdapter(asianAdapter);\r\n                                    break;\r\n                                case \"Western\":\r\n                                    westernRecyclerView.setLayoutManager(layoutManager);\r\n                                    westernAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);\r\n                                    westernRecyclerView.setAdapter(westernAdapter);\r\n                                    break;\r\n                                case \"Meditteranean\":\r\n                                    mediterraneanRecyclerView.setLayoutManager(layoutManager);\r\n                                    mediterraneanAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);\r\n                                    mediterraneanRecyclerView.setAdapter(mediterraneanAdapter);\r\n                                    break;\r\n                                case \"Popular\":\r\n                                    popularRecyclerView.setLayoutManager(layoutManager);\r\n                                    popularAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);\r\n                                    popularRecyclerView.setAdapter(popularAdapter);\r\n                            }\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n    public String getFragmentTag() {\r\n        return this.Tag;\r\n    }\r\n\r\n    public double getRatings(int recipeID) {\r\n        final double[] rating_value = new double[1];\r\n        OkHttpClient client = new OkHttpClient();\r\n        String urlString = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\" + Integer.toString(recipeID)+ \"/information?includeNutrition=true\";\r\n        Request request = new Request.Builder().url(urlString).get()\r\n                .addHeader(\"x-rapidapi-key\", SPOONACULAR_API_KEY)\r\n                .addHeader(\"x-rapidapi-host\", \"spoonacular-recipe-food-nutrition-v1.p.rapidapi.com\")\r\n                .build();\r\n\r\n        client.newCall(request).enqueue(new Callback() {\r\n            @Override\r\n            public void onFailure(@NotNull Call call, @NotNull IOException e) {\r\n                e.printStackTrace();\r\n            }\r\n\r\n            @Override\r\n            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {\r\n                if(response.isSuccessful()) {\r\n                    // JSON result\r\n                    String responseJSON = response.body().string();\r\n\r\n                    try {\r\n                        // storing the needed recipe information\r\n                        JSONObject recipeJSON = new JSONObject(responseJSON);\r\n\r\n                        rating_value[0] = recipeJSON.getDouble(\"spoonacularScore\");\r\n\r\n                    }catch (Exception e) {\r\n                        e.printStackTrace();\r\n                        rating_value[0] = -1;\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n        return rating_value[0];\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/HomePageFragment.java	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/java/com/example/simplyrecipes/Activities/HomePageFragment.java	(date 1605238799262)
+@@ -97,8 +97,6 @@
+     }
+ 
+ 
+-
+-
+     /**
+      *
+      * @param urlString // api url string to search recipes
+Index: app/src/main/java/com/example/simplyrecipes/Activities/PantryIngredientAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/PantryIngredientAdapter.java	(date 1605242787463)
++++ app/src/main/java/com/example/simplyrecipes/Activities/PantryIngredientAdapter.java	(date 1605242787463)
+@@ -0,0 +1,78 @@
++package com.example.simplyrecipes.Activities;
++
++import android.content.Context;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.example.simplyrecipes.R;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.database.DatabaseReference;
++
++import java.util.List;
++
++public class PantryIngredientAdapter extends RecyclerView.Adapter<PantryIngredientAdapter.ViewHolder> {
++    LayoutInflater inflater;
++    List<Ingredient> pantryIngredients;
++    private Context context;
++    DatabaseReference reference;
++    FirebaseAuth auth;
++
++
++    public PantryIngredientAdapter(Context context, List<Ingredient> ingredients) {
++        this.inflater = LayoutInflater.from(context);
++        this.pantryIngredients = ingredients;
++        this.context = context;
++    }
++
++    @NonNull
++    @Override
++    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view = inflater.inflate(R.layout.ingredient_pantry_card_layout, parent, false);
++        return new ViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
++        holder.ingredient.setText(pantryIngredients.get(position).getIngredientName() + "");
++        holder.category.setText(pantryIngredients.get(position).getIngredientCategory() + "");
++        holder.add_ingredient_icon.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Toast.makeText(context, "Add", Toast.LENGTH_SHORT).show();
++            }
++        });
++        holder.pantry_trash_icon.setVisibility(View.VISIBLE);
++        holder.pantry_trash_icon.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++
++    @Override
++    public int getItemCount() {
++        return 0;
++    }
++
++    public class ViewHolder extends RecyclerView.ViewHolder {
++        TextView ingredient, category;
++        ImageView add_ingredient_icon, pantry_trash_icon;
++
++        public ViewHolder(@NonNull View itemView) {
++            super(itemView);
++            ingredient = itemView.findViewById(R.id.ingredient_recipe_card);
++            category = itemView.findViewById(R.id.category_tv);
++            add_ingredient_icon = itemView.findViewById(R.id.add_shopping_list_icon);
++            pantry_trash_icon = itemView.findViewById(R.id.trash_icon);
++        }
++    }
++
++}
+Index: app/src/main/java/com/example/simplyrecipes/Activities/RecipeDetailActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.simplyrecipes.Activities;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport androidx.cardview.widget.CardView;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\nimport android.widget.ToggleButton;\r\n\r\nimport com.example.simplyrecipes.R;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport org.jetbrains.annotations.NotNull;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\nimport org.jsoup.Jsoup;\r\nimport org.jsoup.nodes.Document;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport okhttp3.Call;\r\nimport okhttp3.Callback;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.Response;\r\n\r\npublic class RecipeDetailActivity extends AppCompatActivity {\r\n    // GLOBALS//\r\n    private static final String Tag = \"RecipeDetailFragment\";\r\n    int recipeID;\r\n\r\n    ImageView recipe_image;\r\n    TextView recipe_name;\r\n    TextView recipe_detail;\r\n    TextView cooking_time_val;\r\n    TextView calories_val;\r\n    TextView rating_val;\r\n    TextView instruction_detail_text;\r\n    String image_url = \"\"; // global for firebase access\r\n    int recipe_time; //global for firebase access\r\n\r\n    ToggleButton favorite_toggle; // using it as a save button for now\r\n\r\n    RecyclerView ingredient_list_recycler_view;\r\n    List<Ingredient> ingredientList;\r\n    IngredientAdapter ingredientAdapter;\r\n    FirebaseDatabase db;\r\n    DatabaseReference reference;\r\n    FirebaseAuth auth;\r\n\r\n\r\n    private String SPOONACULAR_API_KEY = \"d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5\";\r\n\r\n    @Override\r\n    public void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n\r\n        // retrieve the recipe ID from the intent\r\n\r\n        setContentView(R.layout.recipe_detail_page);\r\n\r\n        recipeID = getIntent().getIntExtra(\"recipeID\", -100);\r\n        ingredientList = new ArrayList<>();\r\n\r\n        // initialize the views\r\n        recipe_image = findViewById(R.id.recipe_image);\r\n        recipe_name = findViewById(R.id.recipe_name);\r\n        recipe_detail = findViewById(R.id.recipe_detail);\r\n        cooking_time_val = findViewById(R.id.cooking_time_val);\r\n        calories_val = findViewById(R.id.calories_val);\r\n        rating_val = findViewById(R.id.rating_val);\r\n        instruction_detail_text = findViewById(R.id.instruction_detail_text);\r\n        ingredient_list_recycler_view = findViewById(R.id.ingredient_list_recycler_view);\r\n        favorite_toggle = findViewById(R.id.favorite_toggle);\r\n        favorite_toggle.setClickable(true);\r\n\r\n        // just in case something happens to the recipeID from the intent transaction\r\n        if(recipeID > 0) {\r\n            // getting the recipe information\r\n            RecipeDetailsSetup(recipeID);\r\n        }\r\n        // setting up the recycler view\r\n        LinearLayoutManager layoutManager = new LinearLayoutManager(this);\r\n        ingredient_list_recycler_view.setLayoutManager(layoutManager);\r\n        ingredientAdapter = new IngredientAdapter(this, ingredientList);\r\n        ingredient_list_recycler_view.setAdapter(ingredientAdapter);\r\n\r\n        // save button function\r\n\r\n        favorite_toggle.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                final boolean[] success = {false};\r\n\r\n                auth = FirebaseAuth.getInstance();\r\n                db = FirebaseDatabase.getInstance();\r\n                reference = db.getReference(\"users/\"+ auth.getCurrentUser().getUid()+\"/Favorite\");\r\n\r\n                // set up Recipe Name of the recipe\r\n                reference.child(recipeID+\"\").child(\"Recipe Name\").setValue(recipe_name.getText().toString())\r\n                        .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<Void> task) {\r\n                        if(task.isSuccessful()) {\r\n\r\n                        }\r\n                    }\r\n                });\r\n\r\n                // set up Recipe Image URL\r\n                reference = db.getReference(\"users/\"+auth.getCurrentUser().getUid()+\"/Favorite/\"+recipeID);\r\n                reference.child(\"Recipe URL\").setValue(image_url)\r\n                        .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<Void> task) {\r\n\r\n                    }\r\n                });\r\n\r\n                // set up Recipe Time\r\n                reference = db.getReference(\"users/\"+auth.getCurrentUser().getUid()+\"/Favorite/\"+recipeID);\r\n                reference.child(\"Recipe Time\").setValue(recipe_time)\r\n                        .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<Void> task) {\r\n                        if(task.isSuccessful()) {\r\n                            Toast.makeText(RecipeDetailActivity.this, \"Recipe Saved Successfully\", Toast.LENGTH_SHORT).show();\r\n                            success[0] = true;\r\n                        }\r\n                    }\r\n                });\r\n\r\n                if(success[0] == true) {\r\n                    System.out.println(\"Recipe Saved Successfully\");\r\n                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time);\r\n                    ApplicationClass.currentUser.favoriteRecipes.add(savedRecipe);\r\n                }\r\n\r\n\r\n            }\r\n\r\n\r\n        });\r\n\r\n\r\n    }\r\n\r\n    /**\r\n     *\r\n     * @param recipeID\r\n     * Does an API call on a particular recipe to recieve the JSON of that particular recipe and set\r\n     * the details page\r\n     */\r\n    private void RecipeDetailsSetup(int recipeID) {\r\n        // set up the client and the respective GET request\r\n        OkHttpClient client = new OkHttpClient();\r\n        String urlString = \"https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/\" + Integer.toString(recipeID)+ \"/information?includeNutrition=true\";\r\n        Request request = new Request.Builder().url(urlString).get()\r\n                .addHeader(\"x-rapidapi-key\", SPOONACULAR_API_KEY)\r\n                .addHeader(\"x-rapidapi-host\", \"spoonacular-recipe-food-nutrition-v1.p.rapidapi.com\")\r\n                .build();\r\n\r\n        client.newCall(request).enqueue(new Callback() {\r\n            @Override\r\n            public void onFailure(@NotNull Call call, @NotNull IOException e) {\r\n                e.printStackTrace();\r\n            }\r\n\r\n            @Override\r\n            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {\r\n                if(response.isSuccessful()) {\r\n                    // JSON result\r\n                    String responseJSON = response.body().string();\r\n\r\n                    try {\r\n                        // storing the needed recipe information\r\n                        JSONObject recipeJSON = new JSONObject(responseJSON);\r\n                        final String title = recipeJSON.getString(\"title\"); // recipe title\r\n                        image_url = recipeJSON.getString(\"image\"); // recipe image url\r\n                        final String instructions = recipeJSON.getString(\"instructions\"); //recipe's instructions\r\n                        recipe_time = recipeJSON.getInt(\"readyInMinutes\"); //cooking time\r\n\r\n                        // getting calories (within another JSON array of the JSONobject\r\n                        JSONObject nutritionJSON = new JSONObject(recipeJSON.getString(\"nutrition\"));\r\n                        JSONArray nutrientsJSON = nutritionJSON.getJSONArray(\"nutrients\");\r\n                        JSONObject calorieJSON = nutrientsJSON.getJSONObject(0); // get's the calorie JSON\r\n\r\n                        final double calories = calorieJSON.getDouble(\"amount\"); // get calories amount from calorieJSON\r\n                        final double rating = recipeJSON.getDouble(\"spoonacularScore\");\r\n                        final Document detail = Jsoup.parse(recipeJSON.getString(\"summary\"));\r\n\r\n                        // get the ingredients JSONArray\r\n                        JSONArray recipeIngredients = recipeJSON.getJSONArray(\"extendedIngredients\");\r\n                        //travese through the ingredients of the JSONArray\r\n                        for(int i = 0; i < recipeIngredients.length(); i++) {\r\n                            // for each ingredient\r\n                            JSONObject currIngredient = new JSONObject(recipeIngredients.get(i).toString());\r\n                            int ingredientID = currIngredient.getInt(\"id\");\r\n                            String ingredientName = currIngredient.getString(\"name\");\r\n                            Number ingredientAmountNum = currIngredient.getDouble(\"amount\");\r\n                            String units = currIngredient.getString(\"unit\"); // units for measurement\r\n                            String aisle = currIngredient.getString(\"aisle\"); // ingredient type\r\n                            String ingredientAmount = ingredientAmountNum + \" \" +  units;\r\n                            Ingredient ingredient = new Ingredient(ingredientID, ingredientAmount, ingredientName,aisle);\r\n                            ingredientList.add(ingredient);\r\n                        }\r\n                        runOnUiThread(new Runnable() {\r\n                            @Override\r\n                            public void run() {\r\n                                Picasso.get().load(image_url).fit().into(recipe_image);\r\n                                recipe_name.setText(title);\r\n                                instruction_detail_text.setText(instructions);\r\n                                cooking_time_val.setText(Integer.toString(recipe_time) + \" min\");\r\n                                calories_val.setText(calories+\" calories\");\r\n                                rating_val.setText(Double.toString(rating) + \"%\");\r\n                                recipe_detail.setText(detail.text());\r\n\r\n                            }\r\n                        });\r\n                    }catch (Exception e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n            }\r\n        });\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/RecipeDetailActivity.java	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/java/com/example/simplyrecipes/Activities/RecipeDetailActivity.java	(date 1605241689658)
+@@ -6,9 +6,6 @@
+ import androidx.annotation.Nullable;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+-import androidx.cardview.widget.CardView;
+-import androidx.fragment.app.Fragment;
+-
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+@@ -61,7 +58,7 @@
+ 
+     RecyclerView ingredient_list_recycler_view;
+     List<Ingredient> ingredientList;
+-    IngredientAdapter ingredientAdapter;
++    RecipeDetailIngredientAdapter recipeDetailIngredientAdapter;
+     FirebaseDatabase db;
+     DatabaseReference reference;
+     FirebaseAuth auth;
+@@ -100,8 +97,8 @@
+         // setting up the recycler view
+         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+         ingredient_list_recycler_view.setLayoutManager(layoutManager);
+-        ingredientAdapter = new IngredientAdapter(this, ingredientList);
+-        ingredient_list_recycler_view.setAdapter(ingredientAdapter);
++        recipeDetailIngredientAdapter = new RecipeDetailIngredientAdapter(this, ingredientList);
++        ingredient_list_recycler_view.setAdapter(recipeDetailIngredientAdapter);
+ 
+         // save button function
+ 
+Index: app/src/main/java/com/example/simplyrecipes/Activities/PantryPageAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/PantryPageAdapter.java	(date 1605243676619)
++++ app/src/main/java/com/example/simplyrecipes/Activities/PantryPageAdapter.java	(date 1605243676619)
+@@ -0,0 +1,103 @@
++package com.example.simplyrecipes.Activities;
++
++import android.app.Activity;
++import android.content.Context;
++
++import android.content.Intent;
++import android.content.res.Resources;
++import android.graphics.drawable.Drawable;
++import android.media.Image;
++import android.os.Parcelable;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.fragment.app.Fragment;
++import androidx.fragment.app.FragmentManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.example.simplyrecipes.R;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.database.DatabaseReference;
++import com.squareup.picasso.Picasso;
++
++import org.xmlpull.v1.XmlPullParserException;
++
++import java.io.IOException;
++import java.lang.reflect.Method;
++
++import java.util.List;
++
++import androidx.recyclerview.widget.RecyclerView;
++
++/**
++ * TESTING ADAPTER - NOT TO BE USED
++ */
++public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.ViewHolder> {
++
++    LayoutInflater inflater;
++    List<Ingredient> ingredients;
++    Context context;
++    DatabaseReference reference;
++    FirebaseAuth auth;
++
++    public PantryPageAdapter(Context context, List<Ingredient> ingredients) {
++        this.inflater = LayoutInflater.from(context);
++        this.ingredients = ingredients;
++        this.context = context;
++
++    }
++
++    @NonNull
++    @Override
++    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view = inflater.inflate(R.layout.ingredient_pantry_card_layout, parent, false);
++        return new ViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
++        holder.ingredient.setText(ingredients.get(position).getIngredientName());
++        holder.category.setText(ingredients.get(position).getIngredientCategory());
++        holder.add_to_cart.setClickable(true);
++        holder.add_to_cart.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Toast.makeText(context, "Add", Toast.LENGTH_SHORT).show();
++            }
++        });
++        holder.remove_from_pantry.setClickable(true);
++        holder.remove_from_pantry.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
++            }
++        });
++
++    }
++
++    @Override
++    public int getItemCount() {
++        return ingredients.size();
++    }
++
++    public class ViewHolder extends RecyclerView.ViewHolder {
++        TextView ingredient, category;
++        ImageView add_to_cart, remove_from_pantry;
++
++        public ViewHolder(@NonNull View itemView) {
++            super(itemView);
++            ingredient = itemView.findViewById(R.id.ingredient_name);
++            category = itemView.findViewById(R.id.category_tv);
++            add_to_cart = itemView.findViewById(R.id.add_shopping_list_icon);
++            remove_from_pantry = itemView.findViewById(R.id.trash_icon);
++        }
++
++    }
++}
+Index: app/src/main/java/com/example/simplyrecipes/Activities/PantryFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.simplyrecipes.Activities;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport com.example.simplyrecipes.R;\r\n\r\npublic class PantryFragment extends Fragment {\r\n    @Nullable\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {\r\n        return inflater.inflate(R.layout.test_pantry_fragment, container, false);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/simplyrecipes/Activities/PantryFragment.java	(revision 2aa6fda647f2a56aff29d9c870554234099c71e0)
++++ app/src/main/java/com/example/simplyrecipes/Activities/PantryFragment.java	(date 1605243704701)
+@@ -1,19 +1,101 @@
+ package com.example.simplyrecipes.Activities;
+ 
+ import android.os.Bundle;
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ 
++import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
+ import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.example.simplyrecipes.R;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.database.DataSnapshot;
++import com.google.firebase.database.DatabaseError;
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++import com.google.firebase.database.ValueEventListener;
++
++import java.util.ArrayList;
++import java.util.List;
+ 
+ public class PantryFragment extends Fragment {
++    private static final String TAG = "Pantry Fragment";
++
++    FirebaseAuth mAuth;
++    DatabaseReference mDbReference; // Pantry
++    List<Ingredient> mPantryIngredients;
++    PantryPageAdapter mIngredientAdapter;
++    RecyclerView mIngredientsView;
++    FirebaseDatabase mDatabase;
++
++
+     @Nullable
+     @Override
+-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+-        return inflater.inflate(R.layout.test_pantry_fragment, container, false);
++    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
++                             @Nullable Bundle savedInstanceState) {
++        View view = inflater.inflate(R.layout.fragment_pantry, container, false);
++        return view;
+     }
++
++    public void onViewCreated(View view, Bundle savedInstanceState) {
++        super.onViewCreated(view, savedInstanceState);
++        mAuth = FirebaseAuth.getInstance();
++        mPantryIngredients = new ArrayList<>();
++        mDatabase = FirebaseDatabase.getInstance();
++        mIngredientsView = view.findViewById(R.id.pantry_recyclerview);
++        getPantryList();
++    }
++
++    private void getPantryList() {
++        mDbReference =
++                FirebaseDatabase.getInstance().getReference("users/" + mAuth.getCurrentUser().getUid() + "/Pantry");
++        mDbReference.addValueEventListener(new ValueEventListener() {
++            @Override
++            public void onDataChange(@NonNull DataSnapshot snapshot) {
++                for (DataSnapshot snap : snapshot.getChildren()) {
++                    if (!snap.getKey().equals("none")) {
++                        System.out.println(snap.getKey());
++                         int ingredientId = Integer.parseInt(snap.getKey());
++                        String ingredientName = null;
++                        String ingredientCategory = null;
++                        for (DataSnapshot ds : snap.getChildren()) {
++                            System.out.println(ds.getKey().toString());
++                            if (ds.getKey().equals("Ingredient Name")) {
++                                ingredientName = ds.getValue().toString();
++                            } else if (ds.getKey().equals("Ingredient Category")) {
++                                ingredientCategory = ds.getValue().toString();
++                            }
++                        }
++                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName,
++                                ingredientCategory);
++                        mPantryIngredients.add(ingredient);
++                    }
++                }
++                getActivity().runOnUiThread(new Runnable() {
++                    @Override
++                    public void run() {
++                        System.out.println(mPantryIngredients.get(1).getIngredientName());
++                        mIngredientAdapter =
++                                new PantryPageAdapter(getActivity().getApplicationContext(),
++                                mPantryIngredients);
++                        LinearLayoutManager layoutManager =
++                                new LinearLayoutManager(getActivity().getApplicationContext());
++                        mIngredientsView.setLayoutManager(layoutManager);
++                        mIngredientsView.setAdapter(mIngredientAdapter);
++                    }
++                });
++            }
++
++            @Override
++            public void onCancelled(@NonNull DatabaseError error) {
++                Log.d("error", error.getMessage());
++            }
++        });
++    }
++
+ }
