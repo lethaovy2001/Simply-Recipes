@@ -23,7 +23,7 @@
             <!-- TODO implement function inside .java class -->
 
             <ImageView
-                android:id="@+id/trash_icon"
+                android:id="@+id/shopping_trash_icon"
                 android:layout_width="34dp"
                 android:layout_height="27dp"
                 android:contentDescription="@string/trash"
@@ -37,7 +37,7 @@
                 app:srcCompat="@drawable/ic_trash_24dp" />
 
             <TextView
-                android:id="@+id/ingredient"
+                android:id="@+id/shopping_ingredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -52,7 +52,7 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/category_tv"
+                android:id="@+id/shopping_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="3dp"
@@ -62,7 +62,7 @@
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ingredient" />
+                app:layout_constraintTop_toBottomOf="@id/shopping_ingredient" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

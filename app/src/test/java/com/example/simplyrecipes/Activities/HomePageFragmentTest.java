@@ -1,5 +1,7 @@
 package com.example.simplyrecipes.Activities;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ class HomePageFragmentTest{
     };
     private HomePageFragment hpfrag;
     private List<Recipe> recipeList;
+    @BeforeEach
     public void setUp(){
         hpfrag = new HomePageFragment();
         recipeList = new ArrayList<Recipe>();
@@ -21,7 +24,7 @@ class HomePageFragmentTest{
     // Tests if the returned list of recipe from the API has the right amount of recipes
     @Test
     public void extractRecipesTest() throws Exception{
-        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
+        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, "Popular");
         //The size of the list of recipes should be limited to 15.
         assertEquals(15, recipeList.size());
     }
@@ -29,7 +32,9 @@ class HomePageFragmentTest{
     public void getFragmentTagTest() throws Exception{
         assertEquals("HomePageFragment", hpfrag.getFragmentTag());
     }
-    public void buildRequestTest() throws Exception{
-
+    @AfterEach
+    public void tearDown() throws Exception{
+        hpfrag = null;
+        recipeList = null;
     }
 }

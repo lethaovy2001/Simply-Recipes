@@ -2,17 +2,21 @@ package com.example.simplyrecipes.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.content.res.Resources;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simplyrecipes.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +28,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     List<Recipe> recipes;
     Context context;
     FirebaseDatabase db;
+    FirebaseAuth auth;
+    DatabaseReference reference;
 
     public FavoriteAdapter (Context context, List<Recipe> recipes) {
         this.inflater = LayoutInflater.from(context);
@@ -66,6 +72,32 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 context.startActivity(intent);
             }
         });
+
+        final int currPosition = position;
+        holder.favorite_trash_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Removing...", Toast.LENGTH_SHORT).show();
+                Recipe deleteRecipe = recipes.get(currPosition);
+                removeRecipe(deleteRecipe);
+            }
+        });
+
+    }
+
+    private void removeRecipe(Recipe deleteRecipe) {
+        // remove recipe from the Firebase Database
+        auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("users/"
+                +auth.getCurrentUser().getUid()+"/Favorite");
+        reference.child(deleteRecipe.getRecipeID()+"").removeValue();
+        Toast.makeText(context, "Removing From Database...", Toast.LENGTH_SHORT).show();
+
+        int recipePosition = recipes.indexOf(deleteRecipe);
+        recipes.remove(recipePosition);
+        notifyItemRemoved(recipePosition);
+        notifyItemRangeChanged(0, recipes.size());
+        Toast.makeText(context, deleteRecipe.getTitle() + " successfuly removed!", Toast.LENGTH_SHORT).show();
 
     }
 

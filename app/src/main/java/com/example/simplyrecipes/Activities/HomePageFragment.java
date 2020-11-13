@@ -152,7 +152,6 @@ public class HomePageFragment extends Fragment{
                             // url is empty for now
                             Recipe recipe = new Recipe(recipeId, title, image, rating, "");
                             recipeList.add(recipe);
-
                         }
                     } catch(Exception e) {
                         e.printStackTrace();

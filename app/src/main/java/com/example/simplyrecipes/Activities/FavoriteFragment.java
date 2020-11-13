@@ -70,15 +70,16 @@ public class FavoriteFragment extends Fragment {
         addListenerOnToggleButtonClick();
     }
 
+
     private void getFavoriteRecipes() {
         reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                favoriteRecipes.clear();
                 for(DataSnapshot snap : snapshot.getChildren()) {
-                    System.out.println(snap.getKey().toString());
+
                     if(!snap.getKey().toString().equals("none")) {
                         int recipeID = Integer.parseInt(snap.getKey().toString());
                         String recipeName = null;
@@ -87,15 +88,15 @@ public class FavoriteFragment extends Fragment {
                         for(DataSnapshot ds: snap.getChildren()) {
                             if(ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
-                                System.out.println(recipeName.toString());
+
                             }
                             else if (ds.getKey().toString().equals("Recipe Time")) {
                                 recipeTime = ds.getValue().toString();
-                                System.out.println(recipeTime.toString());
+
                             }
                             else if(ds.getKey().toString().equals("Recipe URL")) {
                                 recipeURL = ds.getValue().toString();
-                                System.out.println(recipeURL.toString());
+
                             }
                         }
                         // on the off chance that spoonacular has some missing arguments
@@ -108,7 +109,7 @@ public class FavoriteFragment extends Fragment {
                         if(recipeURL == null) {
                             recipeURL = "";
                         }
-                        System.out.println(recipeID+", "+recipeName+", "+ recipeURL+", "+ recipeTime);
+
                         Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime));
                         favoriteRecipes.add(currRecipe);
                     }
