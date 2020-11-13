@@ -1,6 +1,7 @@
 package com.example.simplyrecipes.Activities;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,10 +73,9 @@ public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDe
                             Toast.makeText(context, "This ingredient already exist in the cart", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.e("error", error.getMessage());
                     }
                 });
                 if(ingredients.get(position).isInShoppingCart() == false) {

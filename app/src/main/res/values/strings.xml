@@ -31,5 +31,6 @@
     <string name="rating">Rating</string>
     <string name="meal_type">Meal Type</string>
     <string name="cuisine">Cuisine</string>
+    <string name="apply">Apply</string>
 
 </resources>
