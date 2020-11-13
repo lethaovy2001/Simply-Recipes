@@ -9,7 +9,6 @@ import android.widget.CompoundButton;
 
 import com.example.simplyrecipes.R;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,14 +21,16 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     Context context;
     List<String> filters;
     Set<String> selectedFilters;
-    Set<String> savedFilters;
 
     public FilterAdapter (Context context, List<String> filters, Set<String> savedFilters) {
         this.inflater = LayoutInflater.from(context);
         this.filters = filters;
         this.context = context;
-        this.selectedFilters = new HashSet<String>();
-        this.savedFilters = savedFilters;
+        if (savedFilters != null) {
+            this.selectedFilters = savedFilters;
+        } else {
+            this.selectedFilters = new HashSet<>();
+        }
     }
 
     @NonNull
@@ -41,7 +42,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FilterAdapter.ViewHolder holder, final int position) {
-        for (String option: savedFilters) {
+        for (String option: selectedFilters) {
             if (filters.get(position) == option) {
                 holder.checkBox.setChecked(true);
             }

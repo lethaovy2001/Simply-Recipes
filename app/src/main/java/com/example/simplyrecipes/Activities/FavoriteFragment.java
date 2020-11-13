@@ -1,6 +1,7 @@
 package com.example.simplyrecipes.Activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +54,7 @@ public class FavoriteFragment extends Fragment {
     View popupView;
     Filter filters;
     HashMap<String, Set<String>> selectedFilters;
+    Context context;
 
     @Nullable
     @Override
@@ -73,47 +74,46 @@ public class FavoriteFragment extends Fragment {
         favoriteRecipes = new ArrayList<>();
         filters = new Filter();
         selectedFilters = new HashMap<>();
+        context = getActivity().getApplicationContext();
         getFavoriteRecipes();
         addListenerOnToggleButtonClick();
     }
 
 
     private void getFavoriteRecipes() {
-        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite");
+        reference = FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Favorite");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 favoriteRecipes.clear();
-                for(DataSnapshot snap : snapshot.getChildren()) {
+                for (DataSnapshot snap : snapshot.getChildren()) {
 
-                    if(!snap.getKey().toString().equals("none")) {
+                    if (!snap.getKey().toString().equals("none")) {
                         int recipeID = Integer.parseInt(snap.getKey().toString());
                         String recipeName = null;
                         String recipeURL = null;
                         String recipeTime = null;
-                        for(DataSnapshot ds: snap.getChildren()) {
-                            if(ds.getKey().toString().equals("Recipe Name")) {
+                        for (DataSnapshot ds : snap.getChildren()) {
+                            if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
 
-                            }
-                            else if (ds.getKey().toString().equals("Recipe Time")) {
+                            } else if (ds.getKey().toString().equals("Recipe Time")) {
                                 recipeTime = ds.getValue().toString();
 
-                            }
-                            else if(ds.getKey().toString().equals("Recipe URL")) {
+                            } else if (ds.getKey().toString().equals("Recipe URL")) {
                                 recipeURL = ds.getValue().toString();
 
                             }
                         }
                         // on the off chance that spoonacular has some missing arguments
-                        if(recipeName == null) {
+                        if (recipeName == null) {
                             recipeName = "";
                         }
-                        if(recipeTime == null) {
+                        if (recipeTime == null) {
                             recipeTime = "-1";
                         }
-                        if(recipeURL == null) {
+                        if (recipeURL == null) {
                             recipeURL = "";
                         }
 
@@ -142,7 +142,7 @@ public class FavoriteFragment extends Fragment {
         });
     }
 
-    private void addListenerOnToggleButtonClick(){
+    private void addListenerOnToggleButtonClick() {
         mealTypeToggleBtn.setOnCheckedChangeListener(handleOnClick(mealTypeToggleBtn));
         cuisineToggleBtn.setOnCheckedChangeListener(handleOnClick(cuisineToggleBtn));
         ratingToggleBtn.setOnCheckedChangeListener(handleOnClick(ratingToggleBtn));
@@ -155,8 +155,6 @@ public class FavoriteFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     showPopupFilter(buttonView);
-                } else {
-
                 }
             }
         };
@@ -175,7 +173,11 @@ public class FavoriteFragment extends Fragment {
         selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
         exitFilterPopupImageView = popupView.findViewById(R.id.exit_button);
         applyFilterButton = popupView.findViewById(R.id.apply_filter_button);
+        addListenerForPopUpView(view);
+        setFilterAdapter(view);
+    }
 
+    private void addListenerForPopUpView(final CompoundButton view) {
         exitFilterPopupImageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -184,6 +186,7 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
+        // TODO: Filter favorite recipes according to the selectedFilters
         applyFilterButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -196,13 +199,11 @@ public class FavoriteFragment extends Fragment {
                 } else if (view.equals(ratingToggleBtn)) {
                     selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
                 }
-                System.out.println("***" + selectedFilters);
                 view.setChecked(true);
                 popupWindow.dismiss();
                 return true;
             }
         });
-        setFilterAdapter(view);
     }
 
     private void setFilterAdapter(View view) {
@@ -211,36 +212,17 @@ public class FavoriteFragment extends Fragment {
 
         if (view.equals(mealTypeToggleBtn)) {
             selectFilterTextView.setText("Select Meal Type");
-            if (selectedFilters.containsKey("Meal Type")) {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions(), selectedFilters.get("Meal Type"));
-            } else {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions(), new HashSet<String>());
-            }
-            filter_recyclerview.setAdapter(filterAdapter);
+            filterAdapter = new FilterAdapter(context, filters.getMealTypeOptions(), selectedFilters.get("Meal Type"));
         } else if (view.equals(cookingTimeToggleBtn)) {
             selectFilterTextView.setText("Select Cooking Time");
-            if (selectedFilters.containsKey("Cooking Time")) {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions(), selectedFilters.get("Cooking Time"));
-            } else {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions(), new HashSet<String>());
-            }
-            filter_recyclerview.setAdapter(filterAdapter);
+            filterAdapter = new FilterAdapter(context, filters.getCookingTimeOptions(), selectedFilters.get("Cooking Time"));
         } else if (view.equals(cuisineToggleBtn)) {
             selectFilterTextView.setText("Select Cuisine");
-            if (selectedFilters.containsKey("Cuisine")) {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions(), selectedFilters.get("Cuisine"));
-            } else {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions(), new HashSet<String>());
-            }
-            filter_recyclerview.setAdapter(filterAdapter);
+            filterAdapter = new FilterAdapter(context, filters.getCuisineOptions(), selectedFilters.get("Cuisine"));
         } else if (view.equals(ratingToggleBtn)) {
             selectFilterTextView.setText("Select Rating");
-            if (selectedFilters.containsKey("Rating")) {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions(), selectedFilters.get("Rating"));
-            } else {
-                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions(), new HashSet<String>());
-            }
-            filter_recyclerview.setAdapter(filterAdapter);
+            filterAdapter = new FilterAdapter(context, filters.getRatingOptions(), selectedFilters.get("Rating"));
         }
+        filter_recyclerview.setAdapter(filterAdapter);
     }
 }
