@@ -22,6 +22,7 @@ Simply Recipes is an android application that is designed to deliver homely and 
 	- Paste the repository [URL](https://github.com/lethaovy2001/Simply-Recipes.git) into the URL box then click **Clone**.
 
 4. Build the project on your AVD
+	- Click **File > Sync Project with Gradle Files** then wait for the build to finish.
 	- In the toolbar, select app from the run configurations drop down menu.
 	- From the target device drop down, choose the device you created in step 2 to run the app on.
 	- Click **Run**.
