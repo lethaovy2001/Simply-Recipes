@@ -76,6 +76,7 @@ public class FavoriteFragment extends Fragment {
                                 System.out.println(recipeURL.toString());
                             }
                         }
+                        // on the off chance that spoonacular has some missing arguments
                         if(recipeName == null) {
                             recipeName = "";
                         }

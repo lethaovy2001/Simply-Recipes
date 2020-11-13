@@ -47,11 +47,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         }else {
             holder.favorite_recipe_tv.setText(recipes.get(position).getTitle());
         }
-        if(!recipes.get(position).getImage().equals("")) {
+        if(!(recipes.get(position).getImage().equals(""))) {
             Picasso.get().load(recipes.get(position).getImage()).into(holder.favorite_recipe_image);
         }
         if(!(recipes.get(position).getRecipeTime() == -1)) {
-            holder.favorite_recipe_category.setText(recipes.get(position).getRecipeTime()+"");
+            holder.favorite_recipe_category.setText(recipes.get(position).getRecipeTime()+" min");
         }
 
         holder.favorite_trash_icon.setClickable(true);
