@@ -45,8 +45,8 @@ public class FavoriteFragment extends Fragment {
         favoriteRecipes = new ArrayList<>();
         getFavoriteRecipes();
 
-
     }
+
 
     private void getFavoriteRecipes() {
         reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite");

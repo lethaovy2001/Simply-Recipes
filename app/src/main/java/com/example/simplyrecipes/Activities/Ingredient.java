@@ -5,12 +5,30 @@ public class Ingredient {
     private String ingredientAmount;
     private String ingredientName;
     private String ingredientCategory;
+    private boolean inShoppingCart;
 
+    // for the recipe details page
     public Ingredient(int ingredientID, String ingredientAmount, String ingredientName, String ingredientCategory) {
         this.ingredientID = ingredientID;
         this.ingredientAmount = ingredientAmount;
         this.ingredientName = ingredientName;
         this.ingredientCategory = ingredientCategory;
+        this.inShoppingCart = false;
+    }
+
+    // for the shopping list page
+    public Ingredient(int ingredientID, String ingredientName, String ingredientCategory) {
+        this.ingredientID = ingredientID;
+        this.ingredientName = ingredientName;
+        this.ingredientCategory = ingredientCategory;
+    }
+
+    public boolean isInShoppingCart() {
+        return inShoppingCart;
+    }
+
+    public void setInShoppingCart(boolean inShoppingCart) {
+        this.inShoppingCart = inShoppingCart;
     }
 
     // for storing ingredients for shopping cart
