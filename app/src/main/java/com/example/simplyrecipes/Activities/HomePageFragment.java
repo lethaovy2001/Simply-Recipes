@@ -37,22 +37,15 @@ import okhttp3.Response;
  * @version 2.0
  */
 
-public class HomePageFragment extends Fragment {
+public class HomePageFragment extends Fragment{
     private static final String Tag = "HomePageFragment";
     private ImageView recipe_of_the_week_image;
     private TextView popular_recipes_text;
     private String SPOONACULAR_API_KEY = "d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5";
-    private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1" +
-            ".p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
-    private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p" +
-            ".rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine" +
-            "=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2" +
-            "&instructionsRequired=true";
-    private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p" +
-            ".rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine" +
-            "=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
-    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p" +
-            ".rapidapi.com/recipes/random?number=2&limitLicense=false";
+    private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
+    private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
+    private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
+    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false";
 
     String recipeOfWeekImageUrl = null;
     RecyclerView popularRecyclerView;
@@ -71,9 +64,10 @@ public class HomePageFragment extends Fragment {
     HomePageAdapter mediterraneanAdapter;
 
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activity_home, container, false);
         return view;
     }
@@ -104,13 +98,14 @@ public class HomePageFragment extends Fragment {
 
 
     /**
-     * @param urlString  // api url string to search recipes
+     *
+     * @param urlString // api url string to search recipes
      * @param recipeList // list to store the recipes retrieve the results
      * @param recipeType // indicating what type of the recipe to set up the right recycler view
      */
-    public void extractRecipes(String urlString, final List<Recipe> recipeList,
-                               final String recipeType) {
+    public boolean extractRecipes(String urlString, final List<Recipe> recipeList, final String recipeType) {
         // use client library to set up the GET request
+        final boolean[] isSuccesful = {true};
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(urlString).get()
@@ -130,27 +125,26 @@ public class HomePageFragment extends Fragment {
                 // response is successful and a JSON object is returned
                 Random rand = new Random(); // placeholder for rating values
 
-                if (response.isSuccessful()) {
+                if(response.isSuccessful()) {
                     String responseJSON = response.body().string();
                     try {
                         JSONObject jsonObject = new JSONObject(responseJSON);
                         JSONArray jsonArray = null;
-                        if (recipeType.equals("Meditteranean") || recipeType.equals("Popular")) {
+                        if(recipeType.equals("Meditteranean") || recipeType.equals("Popular")) {
                             jsonArray = jsonObject.getJSONArray("recipes");
-                        } else {
+                        }else {
                             jsonArray = jsonObject.getJSONArray("results");
                         }
                         // get the list of the recipe results from the GET request
 
                         // traverse through the recipes and store them in a recipe list
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        for(int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject recipeJSON = jsonArray.getJSONObject(i);
 
                             int recipeId = recipeJSON.getInt("id");
-                            // spoonacular's rating score is not too resourceful, placeholder for
-                            // now
-                            double rating = getRatings(recipeId) + (rand.nextInt(100 - 80) + 80);
+                            // spoonacular's rating score is not too resourceful, placeholder for now
+                            double rating = getRatings(recipeId) + (rand.nextInt(100-80) + 80);
                             String title = recipeJSON.getString("title");
                             String image = recipeJSON.getString("image");
 
@@ -158,38 +152,35 @@ public class HomePageFragment extends Fragment {
                             Recipe recipe = new Recipe(recipeId, title, image, rating, "");
                             recipeList.add(recipe);
                         }
-                    } catch (Exception e) {
+                    } catch(Exception e) {
                         e.printStackTrace();
+                    }
+                    if(recipeList.size() <= 0) {
+                        isSuccesful[0] = false;
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            LinearLayoutManager layoutManager =
-                                    new LinearLayoutManager(getActivity().getApplicationContext()
-                                            , LinearLayoutManager.HORIZONTAL, false);
-                            switch (recipeType) {
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                            switch(recipeType) {
                                 case "Asian":
                                     asianRecyclerView.setLayoutManager(layoutManager);
-                                    asianAdapter =
-                                            new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
+                                    asianAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     asianRecyclerView.setAdapter(asianAdapter);
                                     break;
                                 case "Western":
                                     westernRecyclerView.setLayoutManager(layoutManager);
-                                    westernAdapter =
-                                            new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
+                                    westernAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     westernRecyclerView.setAdapter(westernAdapter);
                                     break;
                                 case "Meditteranean":
                                     mediterraneanRecyclerView.setLayoutManager(layoutManager);
-                                    mediterraneanAdapter =
-                                            new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
+                                    mediterraneanAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     mediterraneanRecyclerView.setAdapter(mediterraneanAdapter);
                                     break;
                                 case "Popular":
                                     popularRecyclerView.setLayoutManager(layoutManager);
-                                    popularAdapter =
-                                            new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
+                                    popularAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     popularRecyclerView.setAdapter(popularAdapter);
                             }
                         }
@@ -197,6 +188,7 @@ public class HomePageFragment extends Fragment {
                 }
             }
         });
+        return isSuccesful[0];
     }
 
 
@@ -207,8 +199,7 @@ public class HomePageFragment extends Fragment {
     public double getRatings(int recipeID) {
         final double[] rating_value = new double[1];
         OkHttpClient client = new OkHttpClient();
-        String urlString =
-                "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + Integer.toString(recipeID) + "/information?includeNutrition=true";
+        String urlString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + Integer.toString(recipeID)+ "/information?includeNutrition=true";
         Request request = new Request.Builder().url(urlString).get()
                 .addHeader("x-rapidapi-key", SPOONACULAR_API_KEY)
                 .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com")
@@ -222,7 +213,7 @@ public class HomePageFragment extends Fragment {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (response.isSuccessful()) {
+                if(response.isSuccessful()) {
                     // JSON result
                     String responseJSON = response.body().string();
 
@@ -232,7 +223,7 @@ public class HomePageFragment extends Fragment {
 
                         rating_value[0] = recipeJSON.getDouble("spoonacularScore");
 
-                    } catch (Exception e) {
+                    }catch (Exception e) {
                         e.printStackTrace();
                         rating_value[0] = -1;
                     }

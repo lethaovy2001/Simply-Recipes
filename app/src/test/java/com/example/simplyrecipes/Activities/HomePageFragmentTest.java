@@ -23,10 +23,34 @@ class HomePageFragmentTest{
     }
     // Tests if the returned list of recipe from the API has the right amount of recipes
     @Test
-    public void extractRecipesTest() throws Exception{
-        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, "Popular");
+    public void extractPopularRecipesTest() throws Exception{
+        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
         //The size of the list of recipes should be limited to 15.
-        assertEquals(0, recipeList.size());
+        assertTrue(hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString()));
+    }
+
+    // Tests if the returned list of recipe from the API has the right amount of recipes
+    @Test
+    public void extractWesternRecipesTest() throws Exception{
+        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
+        //The size of the list of recipes should be limited to 15.
+        assertTrue(hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Western.toString()));
+    }
+
+    // Tests if the returned list of recipe from the API has the right amount of recipes
+    @Test
+    public void extractAsianRecipesTest() throws Exception{
+        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
+        //The size of the list of recipes should be limited to 15.
+        assertTrue(hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Asian.toString()));
+    }
+
+    // Tests if the returned list of recipe from the API has the right amount of recipes
+    @Test
+    public void extractMeditteraneanRecipesTest() throws Exception{
+        hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
+        //The size of the list of recipes should be limited to 15.
+        assertTrue(hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Mediterranean.toString()));
     }
     @Test
     public void getFragmentTagTest() throws Exception{
