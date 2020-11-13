@@ -97,8 +97,6 @@ public class HomePageFragment extends Fragment{
     }
 
 
-
-
     /**
      *
      * @param urlString // api url string to search recipes

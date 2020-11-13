@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
+public class RecipeDetailIngredientAdapter extends RecyclerView.Adapter<RecipeDetailIngredientAdapter.ViewHolder> {
     LayoutInflater inflater;
     List<Ingredient> ingredients;
     private Context context;
@@ -32,7 +32,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
 
 
-    public IngredientAdapter(Context context, List<Ingredient> ingredients) {
+    public RecipeDetailIngredientAdapter(Context context, List<Ingredient> ingredients) {
         this.inflater = LayoutInflater.from(context);
         this.ingredients = ingredients;
         this.context = context;
@@ -48,7 +48,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull RecipeDetailIngredientAdapter.ViewHolder holder, final int position) {
 
         holder.ingredient_recipe_card.setText(ingredients.get(position).getIngredientAmount()+
                 " " + ingredients.get(position).getIngredientName());

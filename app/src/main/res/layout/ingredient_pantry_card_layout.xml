@@ -24,8 +24,8 @@
 
             <ImageView
                 android:id="@+id/trash_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="24dp"
                 android:contentDescription="@string/trash"
                 android:onClick="deleteIngredient"
@@ -38,8 +38,8 @@
 
             <ImageView
                 android:id="@+id/add_shopping_list_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginEnd="20dp"
                 android:onClick="addToShoppingList"
                 android:src="@drawable/ic_iconmonstr_shopping_cart_add"
@@ -48,7 +48,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/ingredient"
+                android:id="@+id/ingredient_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ingredient" />
+                app:layout_constraintTop_toBottomOf="@id/ingredient_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

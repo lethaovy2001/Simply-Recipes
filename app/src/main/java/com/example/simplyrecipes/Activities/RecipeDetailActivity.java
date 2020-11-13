@@ -6,9 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,7 +58,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     RecyclerView ingredient_list_recycler_view;
     List<Ingredient> ingredientList;
-    IngredientAdapter ingredientAdapter;
+    RecipeDetailIngredientAdapter recipeDetailIngredientAdapter;
     FirebaseDatabase db;
     DatabaseReference reference;
     FirebaseAuth auth;
@@ -100,8 +97,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         // setting up the recycler view
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         ingredient_list_recycler_view.setLayoutManager(layoutManager);
-        ingredientAdapter = new IngredientAdapter(this, ingredientList);
-        ingredient_list_recycler_view.setAdapter(ingredientAdapter);
+        recipeDetailIngredientAdapter = new RecipeDetailIngredientAdapter(this, ingredientList);
+        ingredient_list_recycler_view.setAdapter(recipeDetailIngredientAdapter);
 
         // save button function
 

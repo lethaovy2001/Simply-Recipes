@@ -25,7 +25,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     FirebaseAuth auth;
     DatabaseReference reference;
 
-    public ShoppingListAdapter(Context context, List<Ingredient> shoppingListIngredients){
+    public ShoppingListAdapter(Context context, List<Ingredient> shoppingListIngredients) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         this.shoppingListIngredients = shoppingListIngredients;
@@ -34,15 +34,22 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @NonNull
     @Override
-    public ShoppingListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ShoppingListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                             int viewType) {
         View view = inflater.inflate(R.layout.shopping_list_card_layout, parent, false);
         return new ViewHolder(view);
     }
 
+    /**
+     * Holder handler for each card layout
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ShoppingListAdapter.ViewHolder holder, int position) {
-        holder.shopping_ingredient.setText(shoppingListIngredients.get(position).getIngredientName()+"");
-        holder.shopping_category.setText(shoppingListIngredients.get(position).getIngredientCategory()+"");
+        holder.shopping_ingredient.setText(shoppingListIngredients.get(position).getIngredientName() + "");
+        holder.shopping_category.setText(shoppingListIngredients.get(position).getIngredientCategory() + "");
         holder.shopping_trash_icon.setVisibility(View.VISIBLE);
         final int currentPosition = position; // for On click listener
         holder.shopping_trash_icon.setOnClickListener(new View.OnClickListener() {
@@ -56,23 +63,36 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     }
 
-    // removes the selected ingredient and updates recyclerview
+    /**
+     * Delete ingredient from pantry list on database and update recycler view
+     *
+     * @param deleteIngredient
+     */
     private void removeIngredient(Ingredient deleteIngredient) {
         // remove ingredient from Firebase Database
         auth = FirebaseAuth.getInstance();
-        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Shopping List");
-        reference.child(deleteIngredient.getIngredientID()+"").removeValue();
-        Toast.makeText(context, deleteIngredient.getIngredientName() +" has been removed from database", Toast.LENGTH_SHORT).show();
+        reference =
+                FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Shopping List");
+        reference.child(deleteIngredient.getIngredientID() + "").removeValue();
+        Toast.makeText(context, deleteIngredient.getIngredientName() + " has been removed from " +
+                "database", Toast.LENGTH_SHORT).show();
 
 
         // remove ingredient from recycler view
         int ingredientPosition = shoppingListIngredients.indexOf(deleteIngredient);
         shoppingListIngredients.remove(ingredientPosition);
         notifyItemRemoved(ingredientPosition);
-        notifyItemRangeChanged(ingredientPosition, shoppingListIngredients.size() - ingredientPosition);
-        Toast.makeText(context, deleteIngredient.getIngredientName() + " removed from shopping list", Toast.LENGTH_SHORT).show();
+        notifyItemRangeChanged(ingredientPosition,
+                shoppingListIngredients.size() - ingredientPosition);
+        Toast.makeText(context, deleteIngredient.getIngredientName() + " removed from shopping " +
+                "list", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Return ingredients list size
+     *
+     * @return
+     */
     @Override
     public int getItemCount() {
         return shoppingListIngredients.size();

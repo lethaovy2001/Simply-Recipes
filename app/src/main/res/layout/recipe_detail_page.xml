@@ -283,11 +283,12 @@
             <!--TODO implement API connection-->
             <TextView
                 android:id="@+id/instruction_detail_text"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="STEP 1: Preheat your pot at 1000F \nSTEP 2: BURN EVERYTHING DOWN"
+                android:text=""
                 app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
+                app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
                 app:layout_constraintTop_toBottomOf="@id/instruction_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
