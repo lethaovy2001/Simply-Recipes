@@ -38,8 +38,10 @@ public class FavoriteFragment extends Fragment {
     DatabaseReference reference;
     FirebaseAuth auth;
     List<Recipe> favoriteRecipes;
-    RecyclerView favorite_recipe_recyclerview;
+    Filter filters;
+    RecyclerView favorite_recipe_recyclerview, filter_recyclerview;
     FavoriteAdapter adapter;
+    FilterAdapter filterAdapter;
     ToggleButton mealTypeToggleBtn, cuisineToggleBtn, cookingTimeToggleBtn, ratingToggleBtn;
     TextView selectFilterTextView;
     ImageView exitFilterPopupImageView;
@@ -63,6 +65,7 @@ public class FavoriteFragment extends Fragment {
         cookingTimeToggleBtn = view.findViewById(R.id.cooking_time_btn);
         ratingToggleBtn = view.findViewById(R.id.rating_btn);
         favoriteRecipes = new ArrayList<>();
+        filters = new Filter();
         getFavoriteRecipes();
         addListenerOnToggleButtonClick();
     }
@@ -163,6 +166,7 @@ public class FavoriteFragment extends Fragment {
         selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
         exitFilterPopupImageView = popupView.findViewById(R.id.exit_button);
         applyFilterButton = popupView.findViewById(R.id.apply_filter_button);
+        filter_recyclerview = popupView.findViewById(R.id.filter_recyclerview);
 
         exitFilterPopupImageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -181,14 +185,25 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        filter_recyclerview.setLayoutManager(layoutManager);
+
         if (view.equals(mealTypeToggleBtn)) {
             selectFilterTextView.setText("Select Meal Type");
+            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions());
+            filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(cookingTimeToggleBtn)) {
             selectFilterTextView.setText("Select Cooking Time");
+            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions());
+            filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(cuisineToggleBtn)) {
             selectFilterTextView.setText("Select Cuisine");
+            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions());
+            filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(ratingToggleBtn)) {
             selectFilterTextView.setText("Select Rating");
+            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions());
+            filter_recyclerview.setAdapter(filterAdapter);
         }
     }
 }

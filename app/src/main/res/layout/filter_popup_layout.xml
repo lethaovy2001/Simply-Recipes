@@ -38,20 +38,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/filter_recyclerview"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
         app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
-        app:layout_constraintTop_toBottomOf="@id/select_filter_tv"
-        app:layout_constraintBottom_toTopOf="@id/apply_filter_button">
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@id/select_filter_tv"></androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/apply_filter_button"
         android:layout_width="323dp"
         android:layout_height="50dp"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_corners"
         android:text="@string/apply"
         android:textColor="#FFFFFF"
@@ -59,6 +57,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_vertical_right_margin"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="@id/guideline_vertical_left_margin"
         app:layout_constraintTop_toBottomOf="@+id/filter_recyclerview"
         app:layout_constraintVertical_bias="0.0" />
