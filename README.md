@@ -8,7 +8,7 @@ Simply Recipes is an android application that is designed to deliver homely and 
 
 ## Installation 
 
-1. Go to [Android Studio] (https://developer.android.com/studio) then download and install Android Studio.
+1. Go to [Android Studio](https://developer.android.com/studio) then download and install Android Studio.
 
 2. Create a new AVD (Android Virtual Device)
 	- Open the AVD Manager by clicking **Tools > AVD Manager.**
@@ -19,7 +19,7 @@ Simply Recipes is an android application that is designed to deliver homely and 
 
 3. Clone the project
 	- Click **VCS > Get from Version Control** to open the VCS screen.
-	- Paste the repository [URL] (https://github.com/lethaovy2001/Simply-Recipes.git) into the URL box then click **Clone**.
+	- Paste the repository [URL](https://github.com/lethaovy2001/Simply-Recipes.git) into the URL box then click **Clone**.
 
 4. Build the project on your AVD
 	- In the toolbar, select app from the run configurations drop down menu.
