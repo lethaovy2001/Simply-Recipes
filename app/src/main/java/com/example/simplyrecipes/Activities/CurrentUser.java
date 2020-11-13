@@ -19,7 +19,7 @@ public class CurrentUser {
     }
 
     public String getEmail() {
-        return this.userUID;
+        return this.email;
     }
 
     public List<Recipe> getFavoriteRecipes() {
