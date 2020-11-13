@@ -1,5 +1,6 @@
 package com.example.simplyrecipes.Activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,7 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class FavoriteFragment extends Fragment {
@@ -38,7 +42,6 @@ public class FavoriteFragment extends Fragment {
     DatabaseReference reference;
     FirebaseAuth auth;
     List<Recipe> favoriteRecipes;
-    Filter filters;
     RecyclerView favorite_recipe_recyclerview, filter_recyclerview;
     FavoriteAdapter adapter;
     FilterAdapter filterAdapter;
@@ -47,7 +50,10 @@ public class FavoriteFragment extends Fragment {
     ImageView exitFilterPopupImageView;
     PopupWindow popupWindow;
     Button applyFilterButton;
-
+    LayoutInflater inflater;
+    View popupView;
+    Filter filters;
+    HashMap<String, Set<String>> selectedFilters;
 
     @Nullable
     @Override
@@ -66,6 +72,7 @@ public class FavoriteFragment extends Fragment {
         ratingToggleBtn = view.findViewById(R.id.rating_btn);
         favoriteRecipes = new ArrayList<>();
         filters = new Filter();
+        selectedFilters = new HashMap<>();
         getFavoriteRecipes();
         addListenerOnToggleButtonClick();
     }
@@ -135,7 +142,7 @@ public class FavoriteFragment extends Fragment {
         });
     }
 
-    public void addListenerOnToggleButtonClick(){
+    private void addListenerOnToggleButtonClick(){
         mealTypeToggleBtn.setOnCheckedChangeListener(handleOnClick(mealTypeToggleBtn));
         cuisineToggleBtn.setOnCheckedChangeListener(handleOnClick(cuisineToggleBtn));
         ratingToggleBtn.setOnCheckedChangeListener(handleOnClick(ratingToggleBtn));
@@ -155,19 +162,19 @@ public class FavoriteFragment extends Fragment {
         };
     }
 
-    public void showPopupFilter(final CompoundButton view) {
+    private void showPopupFilter(final CompoundButton view) {
         // inflate the layout of the popup window
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        View popupView = inflater.inflate(R.layout.filter_popup_layout, null);
-        int width = LinearLayout.LayoutParams.MATCH_PARENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true;
-        popupWindow = new PopupWindow(popupView, width, height, focusable);
+        inflater = getActivity().getLayoutInflater();
+        popupView = inflater.inflate(R.layout.filter_popup_layout, null);
+        popupWindow = new PopupWindow(popupView,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        filter_recyclerview = popupView.findViewById(R.id.filter_recyclerview);
         selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
         exitFilterPopupImageView = popupView.findViewById(R.id.exit_button);
         applyFilterButton = popupView.findViewById(R.id.apply_filter_button);
-        filter_recyclerview = popupView.findViewById(R.id.filter_recyclerview);
 
         exitFilterPopupImageView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -180,30 +187,59 @@ public class FavoriteFragment extends Fragment {
         applyFilterButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (view.equals(mealTypeToggleBtn)) {
+                    selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
+                } else if (view.equals(cookingTimeToggleBtn)) {
+                    selectedFilters.put("Cooking Time", filterAdapter.getSelectedFilters());
+                } else if (view.equals(cuisineToggleBtn)) {
+                    selectedFilters.put("Cuisine", filterAdapter.getSelectedFilters());
+                } else if (view.equals(ratingToggleBtn)) {
+                    selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
+                }
+                System.out.println("***" + selectedFilters);
                 view.setChecked(true);
                 popupWindow.dismiss();
                 return true;
             }
         });
+        setFilterAdapter(view);
+    }
 
+    private void setFilterAdapter(View view) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         filter_recyclerview.setLayoutManager(layoutManager);
 
         if (view.equals(mealTypeToggleBtn)) {
             selectFilterTextView.setText("Select Meal Type");
-            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions());
+            if (selectedFilters.containsKey("Meal Type")) {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions(), selectedFilters.get("Meal Type"));
+            } else {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getMealTypeOptions(), new HashSet<String>());
+            }
             filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(cookingTimeToggleBtn)) {
             selectFilterTextView.setText("Select Cooking Time");
-            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions());
+            if (selectedFilters.containsKey("Cooking Time")) {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions(), selectedFilters.get("Cooking Time"));
+            } else {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCookingTimeOptions(), new HashSet<String>());
+            }
             filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(cuisineToggleBtn)) {
             selectFilterTextView.setText("Select Cuisine");
-            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions());
+            if (selectedFilters.containsKey("Cuisine")) {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions(), selectedFilters.get("Cuisine"));
+            } else {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getCuisineOptions(), new HashSet<String>());
+            }
             filter_recyclerview.setAdapter(filterAdapter);
         } else if (view.equals(ratingToggleBtn)) {
             selectFilterTextView.setText("Select Rating");
-            filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions());
+            if (selectedFilters.containsKey("Rating")) {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions(), selectedFilters.get("Rating"));
+            } else {
+                filterAdapter = new FilterAdapter(getActivity().getApplicationContext(), filters.getRatingOptions(), new HashSet<String>());
+            }
             filter_recyclerview.setAdapter(filterAdapter);
         }
     }
