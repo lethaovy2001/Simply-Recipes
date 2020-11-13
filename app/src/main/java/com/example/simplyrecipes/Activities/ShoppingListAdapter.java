@@ -42,7 +42,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public void onBindViewHolder(@NonNull ShoppingListAdapter.ViewHolder holder, int position) {
         holder.shopping_ingredient.setText(shoppingListIngredients.get(position).getIngredientName()+"");
-        holder.shopping_category.setText(shoppingListIngredients.get(position).getIngredientCategory()+"");
+
+        if(shoppingListIngredients.get(position).getIngredientCategory().equals("null")) {
+            // some of the ingredients do not have category values in the API
+            holder.shopping_category.setVisibility(View.INVISIBLE);
+        }else {
+            holder.shopping_category.setText(shoppingListIngredients.get(position).getIngredientCategory()+"");
+        }
+
         holder.shopping_trash_icon.setVisibility(View.VISIBLE);
         final int currentPosition = position; // for On click listener
         holder.shopping_trash_icon.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +76,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         int ingredientPosition = shoppingListIngredients.indexOf(deleteIngredient);
         shoppingListIngredients.remove(ingredientPosition);
         notifyItemRemoved(ingredientPosition);
-        notifyItemRangeChanged(ingredientPosition, shoppingListIngredients.size() - ingredientPosition);
+        notifyItemRangeChanged(0, shoppingListIngredients.size());
         Toast.makeText(context, deleteIngredient.getIngredientName() + " removed from shopping list", Toast.LENGTH_SHORT).show();
     }
 

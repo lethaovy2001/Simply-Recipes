@@ -54,7 +54,7 @@ public class FavoriteFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                favoriteRecipes.clear();
                 for(DataSnapshot snap : snapshot.getChildren()) {
 
                     if(!snap.getKey().toString().equals("none")) {
