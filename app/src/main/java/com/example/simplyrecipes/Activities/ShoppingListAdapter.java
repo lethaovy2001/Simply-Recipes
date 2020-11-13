@@ -22,7 +22,8 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     LayoutInflater inflater;
     List<Ingredient> shoppingListIngredients;
     Context context;
-    FirebaseDatabase db;
+    FirebaseAuth auth;
+    DatabaseReference reference;
 
     public ShoppingListAdapter(Context context, List<Ingredient> shoppingListIngredients){
         this.inflater = LayoutInflater.from(context);
@@ -43,13 +44,33 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         holder.shopping_ingredient.setText(shoppingListIngredients.get(position).getIngredientName()+"");
         holder.shopping_category.setText(shoppingListIngredients.get(position).getIngredientCategory()+"");
         holder.shopping_trash_icon.setVisibility(View.VISIBLE);
+        final int currentPosition = position; // for On click listener
         holder.shopping_trash_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Removing...", Toast.LENGTH_SHORT).show();
+                Ingredient deleteIngredient = shoppingListIngredients.get(currentPosition);
+                removeIngredient(deleteIngredient);
             }
         });
 
+    }
+
+    // removes the selected ingredient and updates recyclerview
+    private void removeIngredient(Ingredient deleteIngredient) {
+        // remove ingredient from Firebase Database
+        auth = FirebaseAuth.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("users/"+auth.getCurrentUser().getUid()+"/Shopping List");
+        reference.child(deleteIngredient.getIngredientID()+"").removeValue();
+        Toast.makeText(context, deleteIngredient.getIngredientName() +" has been removed from database", Toast.LENGTH_SHORT).show();
+
+
+        // remove ingredient from recycler view
+        int ingredientPosition = shoppingListIngredients.indexOf(deleteIngredient);
+        shoppingListIngredients.remove(ingredientPosition);
+        notifyItemRemoved(ingredientPosition);
+        notifyItemRangeChanged(ingredientPosition, shoppingListIngredients.size() - ingredientPosition);
+        Toast.makeText(context, deleteIngredient.getIngredientName() + " removed from shopping list", Toast.LENGTH_SHORT).show();
     }
 
     @Override

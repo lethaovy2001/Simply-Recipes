@@ -52,14 +52,15 @@ public class ShoppingListFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                shoppingListIngredients.clear();
                 for(DataSnapshot snap: snapshot.getChildren()) {
                     if(!snap.getKey().toString().equals("none")) {
-                        System.out.println(snap.getKey().toString());
+
                         int ingredientId = Integer.parseInt(snap.getKey());
                         String ingredientName = null;
                         String ingredientCategory = null;
                         for(DataSnapshot ds: snap.getChildren()) {
-                            System.out.println(ds.getKey().toString());
+
                             if(ds.getKey().equals("Ingredient Name")) {
                                 ingredientName = ds.getValue().toString();
                             }
@@ -75,7 +76,6 @@ public class ShoppingListFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println(shoppingListIngredients.get(1).getIngredientName());
                         adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), shoppingListIngredients);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
                         shopping_list_recyclerview.setLayoutManager(layoutManager);
