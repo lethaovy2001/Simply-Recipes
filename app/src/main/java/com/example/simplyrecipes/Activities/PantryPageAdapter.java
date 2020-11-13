@@ -42,9 +42,6 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * TESTING ADAPTER - NOT TO BE USED
- */
 public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.ViewHolder> {
 
     LayoutInflater inflater;
@@ -57,7 +54,6 @@ public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.Vi
         this.inflater = LayoutInflater.from(context);
         this.ingredients = ingredients;
         this.context = context;
-
     }
 
     @NonNull
