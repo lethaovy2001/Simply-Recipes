@@ -88,17 +88,17 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("");
     }
 
-    /**
-     * Pushes a Fragment onto the Fragment stack.
-     *
-     * @param fragment - Fragment to be added
-     */
-
-    private void addFragment(Fragment fragment) {
-        this.mFragmentTransaction = mFragment.beginTransaction();
-        mFragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack("" + fragment.getTag());
-        mFragmentTransaction.commit();
-    }
+//    /**
+//     * Pushes a Fragment onto the Fragment stack.
+//     *
+//     * @param fragment - Fragment to be added
+//     */
+//
+//    private void addFragment(Fragment fragment) {
+//        this.mFragmentTransaction = mFragment.beginTransaction();
+//        mFragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack("" + fragment.getTag());
+//        mFragmentTransaction.commit();
+//    }
 
     private void replaceFragment(Fragment fragment) {
         this.mFragmentTransaction = mFragment.beginTransaction();
@@ -106,35 +106,35 @@ public class MainActivity extends AppCompatActivity {
         mFragmentTransaction.commit();
     }
 
-    /**
-     * Pushes a Fragment onto the Fragment stack.
-     *
-     * @param fragment - Fragment to be pushed onto Fragment stack
-     * @param add      - true if adding fragment to stack
-     */
-    public void pushFragment(Fragment fragment, boolean add) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        if (add) {
-            this.fragmentStack.push(fragment);
-        }
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-    }
-
-
-    /**
-     * Pops top Fragment from the stack
-     */
-    public void popFragment() {
-        if (!this.fragmentStack.isEmpty()) {
-            Fragment fragment = this.fragmentStack.elementAt(this.fragmentStack.size() - 2);
-            this.fragmentStack.pop();
-            pushFragment(fragment, false);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    /**
+//     * Pushes a Fragment onto the Fragment stack.
+//     *
+//     * @param fragment - Fragment to be pushed onto Fragment stack
+//     * @param add      - true if adding fragment to stack
+//     */
+//    public void pushFragment(Fragment fragment, boolean add) {
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//
+//        if (add) {
+//            this.fragmentStack.push(fragment);
+//        }
+//        fragmentTransaction.replace(R.id.fragment_container, fragment);
+//        fragmentTransaction.commit();
+//    }
+//
+//
+//    /**
+//     * Pops top Fragment from the stack
+//     */
+//    public void popFragment() {
+//        if (!this.fragmentStack.isEmpty()) {
+//            Fragment fragment = this.fragmentStack.elementAt(this.fragmentStack.size() - 2);
+//            this.fragmentStack.pop();
+//            pushFragment(fragment, false);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     /**
      * When user clicks on back button pressed on phone

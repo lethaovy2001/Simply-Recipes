@@ -47,7 +47,7 @@ class HomePageFragmentTest{
 
     // Tests if the returned list of recipe from the API has the right amount of recipes
     @Test
-    public void extractMeditteraneanRecipesTest() throws Exception{
+    public void extractMediterraneanRecipesTest() throws Exception{
         hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Popular.toString());
         //The size of the list of recipes should be limited to 15.
         assertTrue(hpfrag.extractRecipes(favoriteRecipeURL, recipeList, recipeType.Mediterranean.toString()));

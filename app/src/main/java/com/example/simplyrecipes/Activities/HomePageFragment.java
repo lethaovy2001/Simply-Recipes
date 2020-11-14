@@ -42,7 +42,8 @@ public class HomePageFragment extends Fragment{
     private ImageView recipe_of_the_week_image;
     private TextView popular_recipes_text;
     private String SPOONACULAR_API_KEY = "d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5";
-    private static final String MEDITTERANIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
+    private static final String MEDITERRANEAN_URL = "https://spoonacular-recipe-food-nutrition-v1" +
+            ".p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
     private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
     private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
     private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false";
@@ -88,7 +89,7 @@ public class HomePageFragment extends Fragment{
         mediterraneanRecyclerView = view.findViewById(R.id.mediterranean_recipes_recyclerview);
         mediterraneanRecipes = new ArrayList<>();
 
-//        extractRecipes(MEDITTERANIAN_URL,mediterraneanRecipes, "Meditteranean");
+//        extractRecipes(MEDITERRANEAN_URL,mediterraneanRecipes, "Mediterranean");
 //        extractRecipes(ASIAN_URL, asianRecipes, "Asian");
 //        extractRecipes(WESTERN_URL, westernRecipes, "Western");
         extractRecipes(POPULAR_URL, popularRecipes, "Popular");
@@ -130,7 +131,7 @@ public class HomePageFragment extends Fragment{
                     try {
                         JSONObject jsonObject = new JSONObject(responseJSON);
                         JSONArray jsonArray = null;
-                        if(recipeType.equals("Meditteranean") || recipeType.equals("Popular")) {
+                        if(recipeType.equals("Mediterranean") || recipeType.equals("Popular")) {
                             jsonArray = jsonObject.getJSONArray("recipes");
                         }else {
                             jsonArray = jsonObject.getJSONArray("results");
@@ -173,7 +174,7 @@ public class HomePageFragment extends Fragment{
                                     westernAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     westernRecyclerView.setAdapter(westernAdapter);
                                     break;
-                                case "Meditteranean":
+                                case "Mediterranean":
                                     mediterraneanRecyclerView.setLayoutManager(layoutManager);
                                     mediterraneanAdapter = new HomePageAdapter(getActivity().getApplicationContext(), recipeList);
                                     mediterraneanRecyclerView.setAdapter(mediterraneanAdapter);

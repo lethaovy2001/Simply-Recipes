@@ -166,7 +166,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
      * Does an API call on a particular recipe to recieve the JSON of that particular recipe and set
      * the details page
      */
-    private void RecipeDetailsSetup(int recipeID) {
+    public void RecipeDetailsSetup(int recipeID) {
         // set up the client and the respective GET request
         OkHttpClient client = new OkHttpClient();
         String urlString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + Integer.toString(recipeID)+ "/information?includeNutrition=true";
@@ -238,5 +238,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * For testing purpose
+     * @return
+     */
+    public int getRecipeID() {
+        return this.recipeID;
+    }
+
+    /**
+     * For testing purpose
+     * @return
+     */
+    public int getIngredientSize() {
+        return ingredientList.size();
     }
 }

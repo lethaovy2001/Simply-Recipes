@@ -25,31 +25,36 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class SignInActivityTest {
+public class SignUpActivityTest {
     @Rule
-    public IntentsTestRule<SignInActivity> mActivity =
-            new IntentsTestRule<SignInActivity>(SignInActivity.class) {};
+    public IntentsTestRule<SignUpActivity> mActivity =
+            new IntentsTestRule<SignUpActivity>(SignUpActivity.class) {};
 
     @Test
     public void ensureTextChangesWork() {
         // Type text and then press the button.
-        onView(withId(R.id.editTextTextEmailAddress)).perform(typeText("ishungry@gmail.com"),
+        onView(withId(R.id.editTextUsername)).perform(typeText("test"),
+                closeSoftKeyboard());
+        onView(withId(R.id.editTextUsername))
+                .check(matches(withText("test")));
+
+        onView(withId(R.id.editTextTextEmailAddress)).perform(typeText("testUI@gmail.com"),
                 closeSoftKeyboard());
         onView(withId(R.id.editTextTextEmailAddress))
-                .check(matches(withText("ishungry@gmail.com")));
+                .check(matches(withText("testUI@gmail.com")));
 
-        onView(withId(R.id.editTextTextPassword)).perform(typeText("ishungry"),
+        onView(withId(R.id.editTextTextPassword)).perform(typeText("testUI"),
                 closeSoftKeyboard());
         onView(withId(R.id.editTextTextPassword))
-                .check(matches(withText("ishungry")));
+                .check(matches(withText("testUI")));
 
-        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withId(R.id.sign_up_button)).perform(click());
     }
 
     @Test
     public void changeText_newActivity() {
-        onView(withId(R.id.sign_up_button)).perform(click());
-        intended(hasComponent(SignUpActivity.class.getName()));
+        onView(withId(R.id.sign_in_button)).perform(click());
+        intended(hasComponent(SignInActivity.class.getName()));
     }
 
 }
