@@ -28,6 +28,14 @@ Simply Recipes is an android application that is designed to deliver homely and 
 	- Click **Run**.
 
 
+## Running Test
+
+1. On Project tab, right click *app* and choose **Run 'All Tests' with Coverage** to run unit Tests
+2. Choose *Terminal* tab by clicking **View > Tool Windows > Terminal**
+3. Type *'gradlew connectedAndroidTest jacocoUnitTestReport'* to run UI Tests
+4. To access the report, open the proect source folder, then open *app > build > reports > coverage > debug* and open **index.html**
+
+
 
 
 

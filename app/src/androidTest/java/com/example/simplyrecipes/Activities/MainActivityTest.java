@@ -31,9 +31,7 @@ public class MainActivityTest {
 
     @Test
     public void ensureFragmentUpdated() {
-//        onView(withId(R.id.navPantry)).perform(click());
-//        onView(withId(R.id.toolbar_title_text))
-//                .check(matches(withText("Pantry")));
+
     }
 
 }
