@@ -71,9 +71,7 @@ task jacocoUnitTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) 
     getClassDirectories().setFrom(javaClasses)
     getAdditionalSourceDirs().setFrom(coverageSourceDirs)
     getSourceDirectories().setFrom(coverageSourceDirs)
-    getExecutionData().setFrom(fileTree(dir: "app", includes: [
-            "jacoco/testDebugUnitTest.exec"
-    ]))
+    executionData.setFrom project.fileTree(dir: '.', include: '**/build/jacoco/test.exec')
     reports {
         xml.enabled = true
         html.enabled = true
