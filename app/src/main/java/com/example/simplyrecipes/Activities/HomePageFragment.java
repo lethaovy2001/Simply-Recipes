@@ -93,10 +93,10 @@ public class HomePageFragment extends Fragment{
         mediterraneanRecyclerView = view.findViewById(R.id.mediterranean_recipes_recyclerview);
         mediterraneanRecipes = new ArrayList<>();
 
-//        extractRecipes(MEDITERRANEAN_URL,mediterraneanRecipes, "Mediterranean");
-//        extractRecipes(ASIAN_URL, asianRecipes, "Asian");
-//        extractRecipes(WESTERN_URL, westernRecipes, "Western");
-//        extractRecipes(POPULAR_URL, popularRecipes, "Popular");
+        extractRecipes(MEDITERRANEAN_URL,mediterraneanRecipes, "Mediterranean");
+        extractRecipes(ASIAN_URL, asianRecipes, "Asian");
+        extractRecipes(WESTERN_URL, westernRecipes, "Western");
+        extractRecipes(POPULAR_URL, popularRecipes, "Popular");
         // short subroutine to setting up recipe of the week
         Picasso.get().load("https://spoonacular.com/recipeImages/673172-556x370.jpg").into(recipe_of_the_week_image);
         recipe_of_the_week_image.setOnClickListener(new View.OnClickListener() {
