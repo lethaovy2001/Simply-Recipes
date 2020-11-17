@@ -45,10 +45,10 @@ public class HomePageFragment extends Fragment{
     private TextView popular_recipes_text;
     private String SPOONACULAR_API_KEY = "d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5";
     private static final String MEDITERRANEAN_URL = "https://spoonacular-recipe-food-nutrition-v1" +
-            ".p.rapidapi.com/recipes/random?number=15&limitLicense=false&tags=mediterranean";
-    private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
-    private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
-    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false";
+            ".p.rapidapi.com/recipes/random?number=5&limitLicense=false&tags=mediterranean";
+    private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=5&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
+    private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=5&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
+    private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=5&limitLicense=false";
     private int recipeOfWeekID = 673172;
 
     String recipeOfWeekImageUrl = null;
