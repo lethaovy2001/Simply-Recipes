@@ -1,5 +1,6 @@
 package com.example.simplyrecipes.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simplyrecipes.R;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -47,6 +49,7 @@ public class HomePageFragment extends Fragment{
     private static final String ASIAN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=chinese%2Cjapanese%2Ckorean%2Cvietnamese%2Cthai%2Cindian&ranking=2&instructionsRequired=true";
     private static final String WESTERN_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?limitLicense=true&offset=0&number=10&cuisine=american%2Csouthern%2Cfrench%2Cbritish%2Citalian&ranking=2&instructionsRequired=true";
     private static final String POPULAR_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=2&limitLicense=false";
+    private int recipeOfWeekID = 673172;
 
     String recipeOfWeekImageUrl = null;
     RecyclerView popularRecyclerView;
@@ -63,6 +66,7 @@ public class HomePageFragment extends Fragment{
     HomePageAdapter asianAdapter;
     HomePageAdapter westernAdapter;
     HomePageAdapter mediterraneanAdapter;
+
 
 
 
@@ -92,7 +96,17 @@ public class HomePageFragment extends Fragment{
 //        extractRecipes(MEDITERRANEAN_URL,mediterraneanRecipes, "Mediterranean");
 //        extractRecipes(ASIAN_URL, asianRecipes, "Asian");
 //        extractRecipes(WESTERN_URL, westernRecipes, "Western");
-        extractRecipes(POPULAR_URL, popularRecipes, "Popular");
+//        extractRecipes(POPULAR_URL, popularRecipes, "Popular");
+        // short subroutine to setting up recipe of the week
+        Picasso.get().load("https://spoonacular.com/recipeImages/673172-556x370.jpg").into(recipe_of_the_week_image);
+        recipe_of_the_week_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), RecipeDetailActivity.class);
+                intent.putExtra("recipeID", recipeOfWeekID);
+                getActivity().startActivity(intent);
+            }
+        });
 
 
     }
