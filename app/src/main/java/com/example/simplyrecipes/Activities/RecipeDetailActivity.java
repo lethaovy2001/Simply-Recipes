@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.health.SystemHealthManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,6 +55,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     TextView instruction_detail_text;
     String image_url = ""; // global for firebase access
     int recipe_time; //global for firebase access
+    List<String> dishTypes;
+    List<String> cuisines;
+    double rating;
 
     ToggleButton favorite_toggle; // using it as a save button for now
 
@@ -76,6 +81,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         recipeID = getIntent().getIntExtra("recipeID", -100);
         ingredientList = new ArrayList<>();
+        dishTypes = new ArrayList<>();
+        cuisines = new ArrayList<>();
 
         // initialize the views
         recipe_image = findViewById(R.id.recipe_image);
@@ -145,6 +152,42 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     }
                 });
 
+                // set up Dish Types
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Dish Types").setValue(dishTypes)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()) {
+
+                                }
+                            }
+                        });
+
+                // set up Cuisines
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Cuisines").setValue(cuisines)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()) {
+
+                                }
+                            }
+                        });
+
+                // set up Recipe Rating
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Recipe Rating").setValue(rating)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()) {
+
+                                }
+                            }
+                        });
+
                 if(success[0] == true) {
                     System.out.println("Recipe Saved Successfully");
                     Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time);
@@ -186,7 +229,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     // JSON result
                     String responseJSON = response.body().string();
-
+                    System.out.println(responseJSON);
                     try {
                         // storing the needed recipe information
                         JSONObject recipeJSON = new JSONObject(responseJSON);
@@ -194,6 +237,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         image_url = recipeJSON.getString("image"); // recipe image url
                         final String instructions = recipeJSON.getString("instructions"); //recipe's instructions
                         recipe_time = recipeJSON.getInt("readyInMinutes"); //cooking time
+                        JSONArray dishTypesJSON = recipeJSON.getJSONArray("dishTypes");
+                        for (int i = 0; i < dishTypesJSON.length(); i++) {
+                            dishTypes.add(dishTypesJSON.get(i).toString());
+                        }
 
                         // getting calories (within another JSON array of the JSONobject
                         JSONObject nutritionJSON = new JSONObject(recipeJSON.getString("nutrition"));
@@ -201,7 +248,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         JSONObject calorieJSON = nutrientsJSON.getJSONObject(0); // get's the calorie JSON
 
                         final double calories = calorieJSON.getDouble("amount"); // get calories amount from calorieJSON
-                        final double rating = recipeJSON.getDouble("spoonacularScore");
+                        rating = recipeJSON.getDouble("spoonacularScore");
                         final Document detail = Jsoup.parse(recipeJSON.getString("summary"));
 
                         // get the ingredients JSONArray
@@ -229,7 +276,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
                                 calories_val.setText(calories+" calories");
                                 rating_val.setText(Double.toString(rating) + "%");
                                 recipe_detail.setText(detail.text());
-
                             }
                         });
                     }catch (Exception e) {

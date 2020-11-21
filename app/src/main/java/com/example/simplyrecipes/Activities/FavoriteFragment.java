@@ -3,6 +3,7 @@ package com.example.simplyrecipes.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -33,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -87,14 +89,41 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 favoriteRecipes.clear();
-                for (DataSnapshot snap : snapshot.getChildren()) {
+                for (final DataSnapshot snap : snapshot.getChildren()) {
 
                     if (!snap.getKey().toString().equals("none")) {
                         int recipeID = Integer.parseInt(snap.getKey().toString());
                         String recipeName = null;
                         String recipeURL = null;
                         String recipeTime = null;
-                        for (DataSnapshot ds : snap.getChildren()) {
+//                        String recipeRating = null;
+//                        final List<String> dishTypes = new ArrayList<>();
+
+                        for (final DataSnapshot ds : snap.getChildren()) {
+
+//                            if (ds.getKey().toString().equals("Dish Types")) {
+//                                reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                        for (final DataSnapshot dishType : ds.getChildren()) {
+//                                            dishTypes.add(dishType.getValue().toString());
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//                            }
+
+//                            for (Map.Entry mapElement : selectedFilters.entrySet()) {
+//                                String key = (String)mapElement.getKey();
+//                                Log.d("**" ,mapElement.getValue().toString());
+//                            }
+
+
+
                             if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
 
@@ -103,7 +132,6 @@ public class FavoriteFragment extends Fragment {
 
                             } else if (ds.getKey().toString().equals("Recipe URL")) {
                                 recipeURL = ds.getValue().toString();
-
                             }
                         }
                         // on the off chance that spoonacular has some missing arguments
@@ -199,6 +227,8 @@ public class FavoriteFragment extends Fragment {
                 } else if (view.equals(ratingToggleBtn)) {
                     selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
                 }
+//                adapter.notifyDataSetChanged();
+//                getFavoriteRecipes();
                 view.setChecked(true);
                 popupWindow.dismiss();
                 return true;

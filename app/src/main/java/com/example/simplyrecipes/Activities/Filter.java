@@ -10,9 +10,10 @@ public class Filter {
         List<String> options = new ArrayList<>();
         options.add("Breakfast");
         options.add("Brunch");
+        options.add("Main Dish");
         options.add("Lunch");
-        options.add("Supper");
         options.add("Dinner");
+        options.add("Side Dish");
         return options;
     }
 
