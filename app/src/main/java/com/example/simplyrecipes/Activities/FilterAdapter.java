@@ -43,7 +43,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull FilterAdapter.ViewHolder holder, final int position) {
         for (String option: selectedFilters) {
-            if (filters.get(position) == option) {
+            if (filters.get(position).toLowerCase().equals(option.toLowerCase())) {
                 holder.checkBox.setChecked(true);
             }
         }
@@ -52,9 +52,9 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
-                    selectedFilters.add(filters.get(position).toLowerCase());
+                    selectedFilters.add(filters.get(position));
                 } else {
-                    selectedFilters.remove(filters.get(position).toLowerCase());
+                    selectedFilters.remove(filters.get(position));
                 }
             }
         });
