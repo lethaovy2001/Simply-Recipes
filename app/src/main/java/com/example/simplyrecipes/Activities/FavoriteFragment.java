@@ -81,10 +81,33 @@ public class FavoriteFragment extends Fragment {
         addListenerOnToggleButtonClick();
     }
 
+    private void applyFilter() {
+        List<Recipe> filteredRecipes = new ArrayList<>();
+        int index = 0;
+        for (Recipe recipe: favoriteRecipes) {
+            if (selectedFilters.containsKey("Rating")) {
+                double recipeRating = recipe.getRecipeRating() * 5 / 100;
+                Log.d("rating", recipeRating + " " + selectedFilters.get("Rating").contains("3.0 - 4.0"));
+                if (selectedFilters.get("Rating").contains("4.0 - 5.0") && recipeRating >= 4.0 && recipeRating <= 5.0) {
+                    filteredRecipes.add(recipe);
+                } else if (selectedFilters.get("Rating").contains("3.0 - 4.0") && recipeRating >= 3.0 && recipeRating <= 4.0) {
+                    filteredRecipes.add(recipe);
+                } else if (selectedFilters.get("Rating").contains("2.0 - 3.0") && recipeRating >= 2.0 && recipeRating <= 3.0) {
+                    filteredRecipes.add(recipe);
+                } else if (selectedFilters.get("Rating").contains("1.0 - 2.0") && recipeRating >= 1.0 && recipeRating <= 2.0) {
+                    filteredRecipes.add(recipe);
+                }
+            }
+            index += 1;
+        }
+
+        favoriteRecipes.clear();
+        favoriteRecipes.addAll(filteredRecipes);
+        adapter.notifyDataSetChanged();
+    }
 
     private void getFavoriteRecipes() {
         reference = FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Favorite");
-
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,11 +119,10 @@ public class FavoriteFragment extends Fragment {
                         String recipeName = null;
                         String recipeURL = null;
                         String recipeTime = null;
-//                        String recipeRating = null;
+                        String recipeRating = null;
 //                        final List<String> dishTypes = new ArrayList<>();
 
                         for (final DataSnapshot ds : snap.getChildren()) {
-
 //                            if (ds.getKey().toString().equals("Dish Types")) {
 //                                reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
 //                                    @Override
@@ -109,31 +131,23 @@ public class FavoriteFragment extends Fragment {
 //                                            dishTypes.add(dishType.getValue().toString());
 //                                        }
 //                                    }
-//
 //                                    @Override
 //                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 //
 //                                    }
 //                                });
 //                            }
-
-//                            for (Map.Entry mapElement : selectedFilters.entrySet()) {
-//                                String key = (String)mapElement.getKey();
-//                                Log.d("**" ,mapElement.getValue().toString());
-//                            }
-
-
-
                             if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
-
                             } else if (ds.getKey().toString().equals("Recipe Time")) {
                                 recipeTime = ds.getValue().toString();
-
                             } else if (ds.getKey().toString().equals("Recipe URL")) {
                                 recipeURL = ds.getValue().toString();
+                            } else if (ds.getKey().toString().equals("Recipe Rating")) {
+                                recipeRating = ds.getValue().toString();
                             }
                         }
+
                         // on the off chance that spoonacular has some missing arguments
                         if (recipeName == null) {
                             recipeName = "";
@@ -144,8 +158,11 @@ public class FavoriteFragment extends Fragment {
                         if (recipeURL == null) {
                             recipeURL = "";
                         }
+                        if (recipeRating == null) {
+                            recipeRating = "-1";
+                        }
 
-                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime));
+                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), recipeRating);
                         favoriteRecipes.add(currRecipe);
                     }
                 }
@@ -169,6 +186,8 @@ public class FavoriteFragment extends Fragment {
 
         });
     }
+
+
 
     private void addListenerOnToggleButtonClick() {
         mealTypeToggleBtn.setOnCheckedChangeListener(handleOnClick(mealTypeToggleBtn));
@@ -227,8 +246,7 @@ public class FavoriteFragment extends Fragment {
                 } else if (view.equals(ratingToggleBtn)) {
                     selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
                 }
-//                adapter.notifyDataSetChanged();
-//                getFavoriteRecipes();
+                applyFilter();
                 view.setChecked(true);
                 popupWindow.dismiss();
                 return true;

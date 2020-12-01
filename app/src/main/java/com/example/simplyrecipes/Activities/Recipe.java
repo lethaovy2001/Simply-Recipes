@@ -10,6 +10,7 @@ public class Recipe {
     private double recipeRating;
     private String url;
     private int recipeTime;
+    private List<String> dishTypes;
 
     public int getRecipeTime() {
         return this.recipeTime;
@@ -35,15 +36,20 @@ public class Recipe {
         this.image = image;
         this.recipeRating = recipeRating;
         this.url = url;
-
     }
+
     // for storing in recipes in favorites (only need recipeID and recipeName
-    public Recipe(int recipeID, String recipeName, String image, int recipeTime) {
+    public Recipe(int recipeID, String recipeName, String image, int recipeTime, double recipeRating) {
         this.recipeID = recipeID;
         this.title = recipeName;
         this.image = image;
         this.recipeTime = recipeTime;
+        this.recipeRating = recipeRating;
     }
+
+//    public List<String> getDishTypes() { return dishTypes; }
+//
+//    public void setDishTypes(List<String> dishTypes) { this.dishTypes = dishTypes; }
 
     public String getTitle() {
         return title;

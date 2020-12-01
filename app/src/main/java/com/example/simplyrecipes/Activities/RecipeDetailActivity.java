@@ -190,7 +190,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
                 if(success[0] == true) {
                     System.out.println("Recipe Saved Successfully");
-                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time);
+                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time, rating);
                     ApplicationClass.currentUser.favoriteRecipes.add(savedRecipe);
                 }
 

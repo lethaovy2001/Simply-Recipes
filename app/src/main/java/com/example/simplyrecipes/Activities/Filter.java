@@ -31,7 +31,8 @@ public class Filter {
         List<String> options = new ArrayList<>();
         options.add("4.0 - 5.0");
         options.add("3.0 - 4.0");
-        options.add("2.0 - 1.0");
+        options.add("2.0 - 3.0");
+        options.add("1.0 - 2.0");
         return options;
     }
 
