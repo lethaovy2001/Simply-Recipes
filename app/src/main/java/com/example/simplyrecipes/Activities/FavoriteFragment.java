@@ -84,23 +84,55 @@ public class FavoriteFragment extends Fragment {
     private void applyFilter() {
         List<Recipe> filteredRecipes = new ArrayList<>();
         int index = 0;
+        int countedFilters = 0;
+        int totalFilters = selectedFilters.size();
+        if (totalFilters == 0) {
+            return;
+        }
+
         for (Recipe recipe: favoriteRecipes) {
+            countedFilters = 0;
             if (selectedFilters.containsKey("Rating")) {
                 double recipeRating = recipe.getRecipeRating() * 5 / 100;
-                Log.d("rating", recipeRating + " " + selectedFilters.get("Rating").contains("3.0 - 4.0"));
                 if (selectedFilters.get("Rating").contains("4.0 - 5.0") && recipeRating >= 4.0 && recipeRating <= 5.0) {
-                    filteredRecipes.add(recipe);
-                } else if (selectedFilters.get("Rating").contains("3.0 - 4.0") && recipeRating >= 3.0 && recipeRating <= 4.0) {
-                    filteredRecipes.add(recipe);
-                } else if (selectedFilters.get("Rating").contains("2.0 - 3.0") && recipeRating >= 2.0 && recipeRating <= 3.0) {
-                    filteredRecipes.add(recipe);
-                } else if (selectedFilters.get("Rating").contains("1.0 - 2.0") && recipeRating >= 1.0 && recipeRating <= 2.0) {
-                    filteredRecipes.add(recipe);
+                    countedFilters += 1;
+                } else if (selectedFilters.get("Rating").contains("3.0 - 4.0") && recipeRating >= 3.0 && recipeRating < 4.0) {
+                    countedFilters += 1;
+                } else if (selectedFilters.get("Rating").contains("2.0 - 3.0") && recipeRating >= 2.0 && recipeRating < 3.0) {
+                    countedFilters += 1;
+                } else if (selectedFilters.get("Rating").contains("1.0 - 2.0") && recipeRating >= 1.0 && recipeRating < 2.0) {
+                    countedFilters += 1;
                 }
             }
+
+            if (selectedFilters.containsKey("Cooking Time")) {
+                Log.d("**crash", "1");
+                Set<String> ratingOptions = selectedFilters.get("Cooking Time");
+                if (ratingOptions.contains("Less than 15 minutes") && recipe.getRecipeTime() < 15) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("15 - 30 minutes") && recipe.getRecipeTime() >= 15 && recipe.getRecipeTime() < 30) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("30 - 60 minutes") && recipe.getRecipeTime() >= 30 && recipe.getRecipeTime() < 60) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("60 - 120 minutes") && recipe.getRecipeTime() >= 60 && recipe.getRecipeTime() < 120) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("More than 120 minutes") && recipe.getRecipeTime() >= 120) {
+                    countedFilters += 1;
+                }
+            }
+
+            if (selectedFilters.containsKey(""))
+
+            if (countedFilters == totalFilters) {
+                filteredRecipes.add(recipe);
+            }
+
             index += 1;
         }
 
+        for (Recipe recipe: filteredRecipes) {
+            Log.d("**recipe", recipe.getTitle() + " ");
+        }
         favoriteRecipes.clear();
         favoriteRecipes.addAll(filteredRecipes);
         adapter.notifyDataSetChanged();
@@ -162,7 +194,7 @@ public class FavoriteFragment extends Fragment {
                             recipeRating = "-1";
                         }
 
-                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), recipeRating);
+                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), Double.parseDouble(recipeRating));
                         favoriteRecipes.add(currRecipe);
                     }
                 }

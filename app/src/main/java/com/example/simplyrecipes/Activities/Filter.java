@@ -20,10 +20,10 @@ public class Filter {
     public List<String> getCookingTimeOptions() {
         List<String> options = new ArrayList<>();
         options.add("Less than 15 minutes");
-        options.add("15 minutes - 30 minutes");
-        options.add("30 minutes - 1 hour");
-        options.add("1 hour - 2 hours ");
-        options.add("More than 2 hours");
+        options.add("15 - 30 minutes");
+        options.add("30 - 60 minutes");
+        options.add("60 - 120 minutes");
+        options.add("More than 120 minutes");
         return options;
     }
 
