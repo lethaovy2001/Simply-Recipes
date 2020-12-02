@@ -83,7 +83,6 @@ public class FavoriteFragment extends Fragment {
 
     private void applyFilter() {
         List<Recipe> filteredRecipes = new ArrayList<>();
-        int index = 0;
         int countedFilters = 0;
         int totalFilters = selectedFilters.size();
         if (totalFilters == 0) {
@@ -106,7 +105,6 @@ public class FavoriteFragment extends Fragment {
             }
 
             if (selectedFilters.containsKey("Cooking Time")) {
-                Log.d("**crash", "1");
                 Set<String> ratingOptions = selectedFilters.get("Cooking Time");
                 if (ratingOptions.contains("Less than 15 minutes") && recipe.getRecipeTime() < 15) {
                     countedFilters += 1;
@@ -121,17 +119,9 @@ public class FavoriteFragment extends Fragment {
                 }
             }
 
-            if (selectedFilters.containsKey(""))
-
             if (countedFilters == totalFilters) {
                 filteredRecipes.add(recipe);
             }
-
-            index += 1;
-        }
-
-        for (Recipe recipe: filteredRecipes) {
-            Log.d("**recipe", recipe.getTitle() + " ");
         }
         favoriteRecipes.clear();
         favoriteRecipes.addAll(filteredRecipes);
@@ -152,24 +142,24 @@ public class FavoriteFragment extends Fragment {
                         String recipeURL = null;
                         String recipeTime = null;
                         String recipeRating = null;
-//                        final List<String> dishTypes = new ArrayList<>();
+                        final List<String> dishTypes = new ArrayList<>();
 
                         for (final DataSnapshot ds : snap.getChildren()) {
-//                            if (ds.getKey().toString().equals("Dish Types")) {
-//                                reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                        for (final DataSnapshot dishType : ds.getChildren()) {
-//                                            dishTypes.add(dishType.getValue().toString());
-//                                        }
-//                                    }
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                    }
-//                                });
-//                            }
-                            if (ds.getKey().toString().equals("Recipe Name")) {
+                            if (ds.getKey().toString().equals("Dish Types")) {
+                                reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (final DataSnapshot dishType : ds.getChildren()) {
+                                            dishTypes.add(dishType.getValue().toString());
+                                            // **** GET THE DISH TYPE
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            } else if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
                             } else if (ds.getKey().toString().equals("Recipe Time")) {
                                 recipeTime = ds.getValue().toString();
@@ -179,6 +169,10 @@ public class FavoriteFragment extends Fragment {
                                 recipeRating = ds.getValue().toString();
                             }
                         }
+
+                        // ***** ADD RECIPES TO FAVORITE
+                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), Double.parseDouble(recipeRating));
+                        favoriteRecipes.add(currRecipe);
 
                         // on the off chance that spoonacular has some missing arguments
                         if (recipeName == null) {
@@ -194,8 +188,7 @@ public class FavoriteFragment extends Fragment {
                             recipeRating = "-1";
                         }
 
-                        Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), Double.parseDouble(recipeRating));
-                        favoriteRecipes.add(currRecipe);
+
                     }
                 }
                 getActivity().runOnUiThread(new Runnable() {
@@ -218,8 +211,6 @@ public class FavoriteFragment extends Fragment {
 
         });
     }
-
-
 
     private void addListenerOnToggleButtonClick() {
         mealTypeToggleBtn.setOnCheckedChangeListener(handleOnClick(mealTypeToggleBtn));
@@ -305,4 +296,11 @@ public class FavoriteFragment extends Fragment {
         }
         filter_recyclerview.setAdapter(filterAdapter);
     }
+}
+
+interface OnGetDataListener {
+    //this is for callbacks
+    void onSuccess(Recipe recipe, List<String> dishType);
+    void onStart();
+    void onFailure();
 }

@@ -47,9 +47,9 @@ public class Recipe {
         this.recipeRating = recipeRating;
     }
 
-//    public List<String> getDishTypes() { return dishTypes; }
-//
-//    public void setDishTypes(List<String> dishTypes) { this.dishTypes = dishTypes; }
+    public List<String> getDishTypes() { return dishTypes; }
+
+    public void setDishTypes(List<String> dishTypes) { this.dishTypes = dishTypes; }
 
     public String getTitle() {
         return title;
