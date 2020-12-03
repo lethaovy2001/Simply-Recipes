@@ -84,15 +84,12 @@ public class FavoriteFragment extends Fragment {
 
     private void applyFilter() {
         filteredRecipes.clear();
-        int index = 0;
         int countedFilters = 0;
         int totalFilters = selectedFilters.size();
-
 
         if (totalFilters == 0) {
             filteredRecipes.addAll(favoriteRecipes);
             adapter.notifyDataSetChanged();
-            Log.d("*return", "TotalFilters = 0");
             return;
         }
 
@@ -126,14 +123,10 @@ public class FavoriteFragment extends Fragment {
                 }
             }
 
-            Log.d("***", countedFilters + " == " + totalFilters);
             if (countedFilters == totalFilters) {
                 filteredRecipes.add(recipe);
             }
-            index += 1;
         }
-
-        Log.d("*clear", "clear");
         adapter.notifyDataSetChanged();
     }
 
@@ -269,31 +262,41 @@ public class FavoriteFragment extends Fragment {
         applyFilterButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                selectedFilters.clear();
                 if (view.equals(mealTypeToggleBtn)) {
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Meal Type");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                     selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
                 } else if (view.equals(cookingTimeToggleBtn)) {
-
                     if (filterAdapter.getSelectedFilters().size() == 0) {
                         selectedFilters.remove("Cooking Time");
-                        Log.d("****LALA", selectedFilters.size() + "");
-                        applyFilter();
-                        popupWindow.dismiss();
-
                         view.setChecked(false);
-                        return true;
                     } else {
                         selectedFilters.put("Cooking Time", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
                     }
                 } else if (view.equals(cuisineToggleBtn)) {
-                    selectedFilters.put("Cuisine", filterAdapter.getSelectedFilters());
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Cuisine");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Cuisine", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                 } else if (view.equals(ratingToggleBtn)) {
-                    selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Rating");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                 }
-
-                Log.d("*selectedFilters2", selectedFilters.size() + "");
                 applyFilter();
-                view.setChecked(true);
                 popupWindow.dismiss();
                 return true;
             }
