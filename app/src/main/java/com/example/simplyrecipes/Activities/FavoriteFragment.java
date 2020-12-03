@@ -43,7 +43,7 @@ public class FavoriteFragment extends Fragment {
     FirebaseDatabase db;
     DatabaseReference reference;
     FirebaseAuth auth;
-    List<Recipe> favoriteRecipes;
+    List<Recipe> favoriteRecipes, filteredRecipes;
     RecyclerView favorite_recipe_recyclerview, filter_recyclerview;
     FavoriteAdapter adapter;
     FilterAdapter filterAdapter;
@@ -74,6 +74,7 @@ public class FavoriteFragment extends Fragment {
         cookingTimeToggleBtn = view.findViewById(R.id.cooking_time_btn);
         ratingToggleBtn = view.findViewById(R.id.rating_btn);
         favoriteRecipes = new ArrayList<>();
+        filteredRecipes = new ArrayList<>();
         filters = new Filter();
         selectedFilters = new HashMap<>();
         context = getActivity().getApplicationContext();
@@ -82,10 +83,13 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void applyFilter() {
-        List<Recipe> filteredRecipes = new ArrayList<>();
+        filteredRecipes.clear();
         int countedFilters = 0;
         int totalFilters = selectedFilters.size();
+
         if (totalFilters == 0) {
+            filteredRecipes.addAll(favoriteRecipes);
+            adapter.notifyDataSetChanged();
             return;
         }
 
@@ -123,8 +127,6 @@ public class FavoriteFragment extends Fragment {
                 filteredRecipes.add(recipe);
             }
         }
-        favoriteRecipes.clear();
-        favoriteRecipes.addAll(filteredRecipes);
         adapter.notifyDataSetChanged();
     }
 
@@ -133,7 +135,7 @@ public class FavoriteFragment extends Fragment {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                favoriteRecipes.clear();
+                //favoriteRecipes.clear();
                 for (final DataSnapshot snap : snapshot.getChildren()) {
 
                     if (!snap.getKey().toString().equals("none")) {
@@ -191,10 +193,12 @@ public class FavoriteFragment extends Fragment {
 
                     }
                 }
+
+                filteredRecipes.addAll(favoriteRecipes);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        adapter = new FavoriteAdapter(getActivity().getApplicationContext(), favoriteRecipes);
+                        adapter = new FavoriteAdapter(getActivity().getApplicationContext(), filteredRecipes);
 
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
 
@@ -208,7 +212,6 @@ public class FavoriteFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println("Error" + error.getMessage());
             }
-
         });
     }
 
@@ -261,16 +264,40 @@ public class FavoriteFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (view.equals(mealTypeToggleBtn)) {
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Meal Type");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                     selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
                 } else if (view.equals(cookingTimeToggleBtn)) {
-                    selectedFilters.put("Cooking Time", filterAdapter.getSelectedFilters());
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Cooking Time");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Cooking Time", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                 } else if (view.equals(cuisineToggleBtn)) {
-                    selectedFilters.put("Cuisine", filterAdapter.getSelectedFilters());
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Cuisine");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Cuisine", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                 } else if (view.equals(ratingToggleBtn)) {
-                    selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
+                    if (filterAdapter.getSelectedFilters().size() == 0) {
+                        selectedFilters.remove("Rating");
+                        view.setChecked(false);
+                    } else {
+                        selectedFilters.put("Rating", filterAdapter.getSelectedFilters());
+                        view.setChecked(true);
+                    }
                 }
                 applyFilter();
-                view.setChecked(true);
                 popupWindow.dismiss();
                 return true;
             }
