@@ -214,6 +214,8 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int index = 0;
+                favoriteRecipes.clear();
+                filteredRecipes.clear();
                 for (final DataSnapshot snap : snapshot.getChildren()) {
 
                     if (!snap.getKey().toString().equals("none")) {
