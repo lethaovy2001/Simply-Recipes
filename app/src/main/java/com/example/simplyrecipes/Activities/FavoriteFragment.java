@@ -295,10 +295,8 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Log.d("Ischecked", isChecked + "");
                     showPopupFilter(buttonView);
                 } else {
-                    Log.d("**Ischecked", isChecked + "");
                     if (buttonView.equals(mealTypeToggleBtn) && selectedFilters.containsKey("Meal Type")) {
                         if (selectedFilters.get("Meal Type").size() > 0) {
                             mealTypeToggleBtn.setChecked(true);
@@ -339,11 +337,14 @@ public class FavoriteFragment extends Fragment {
             public void onDismiss() {
                 if (!selectedFilters.containsKey("Meal Type")) {
                     mealTypeToggleBtn.setChecked(false);
-                } else if (!selectedFilters.containsKey("Cooking Time")) {
+                }
+                if (!selectedFilters.containsKey("Cooking Time")) {
                     cookingTimeToggleBtn.setChecked(false);
-                } else if (!selectedFilters.containsKey("Cuisine")) {
+                }
+                if (!selectedFilters.containsKey("Cuisine")) {
                     cuisineToggleBtn.setChecked(false);
-                } else if (!selectedFilters.containsKey("Rating")) {
+                }
+                if (!selectedFilters.containsKey("Rating")) {
                     ratingToggleBtn.setChecked(false);
                 }
             }
@@ -374,7 +375,6 @@ public class FavoriteFragment extends Fragment {
                     if (filterAdapter.getSelectedFilters().size() == 0) {
                         selectedFilters.remove("Meal Type");
                         view.setChecked(false);
-                        Log.d("*selectedFilters", selectedFilters.size() + "");
                     } else {
                         selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
                         view.setChecked(true);
