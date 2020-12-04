@@ -11,6 +11,7 @@ public class Recipe {
     private String url;
     private int recipeTime;
     private List<String> dishTypes;
+    private List<String> cuisines;
 
     public int getRecipeTime() {
         return this.recipeTime;
@@ -50,6 +51,10 @@ public class Recipe {
     public List<String> getDishTypes() { return dishTypes; }
 
     public void setDishTypes(List<String> dishTypes) { this.dishTypes = dishTypes; }
+
+    public List<String> getCuisines() { return cuisines; }
+
+    public void setCuisines(List<String> cuisines) { this.cuisines = cuisines; }
 
     public String getTitle() {
         return title;

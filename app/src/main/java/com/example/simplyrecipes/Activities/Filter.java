@@ -40,12 +40,12 @@ public class Filter {
         List<String> options = new ArrayList<>();
         options.add("Chinese");
         options.add("Mexican");
-        options.add("Korean");
-        options.add("Vietnamese");
+        options.add("Italian");
+        options.add("European");
         options.add("Indian");
         options.add("Caribbean");
-        options.add("Indian");
-        options.add("Thai");
+        options.add("Mediterranean");
+        options.add("Asian");
         options.add("Japanese");
         return options;
     }

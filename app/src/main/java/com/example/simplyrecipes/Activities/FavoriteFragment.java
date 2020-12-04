@@ -87,6 +87,7 @@ public class FavoriteFragment extends Fragment {
         int countedFilters = 0;
         int totalFilters = selectedFilters.size();
 
+        Log.d("*totalFilters", " " + totalFilters);
         if (totalFilters == 0) {
             filteredRecipes.addAll(favoriteRecipes);
             adapter.notifyDataSetChanged();
@@ -110,6 +111,7 @@ public class FavoriteFragment extends Fragment {
 
             if (selectedFilters.containsKey("Cooking Time")) {
                 Set<String> ratingOptions = selectedFilters.get("Cooking Time");
+                Log.d("**LALA", ratingOptions + " " + recipe.getRecipeTime() );
                 if (ratingOptions.contains("Less than 15 minutes") && recipe.getRecipeTime() < 15) {
                     countedFilters += 1;
                 } else if (ratingOptions.contains("15 - 30 minutes") && recipe.getRecipeTime() >= 15 && recipe.getRecipeTime() < 30) {
@@ -140,6 +142,32 @@ public class FavoriteFragment extends Fragment {
                 }
             }
 
+            if (selectedFilters.containsKey("Cuisine")) {
+                Set<String> ratingOptions = selectedFilters.get("Cuisine");
+                if (recipe.getCuisines() != null) {
+                    if (ratingOptions.contains("chinese") && recipe.getCuisines().contains("Chinese")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("mexican") && recipe.getCuisines().contains("Mexican")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("italian") && recipe.getCuisines().contains("Italian")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("european") && recipe.getCuisines().contains("European")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("indian") && recipe.getCuisines().contains("Indian")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("caribbean") && recipe.getCuisines().contains("Caribbean")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("mediterranean") && recipe.getCuisines().contains("Mediterranean")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("asian") && recipe.getCuisines().contains("Asian")) {
+                        countedFilters += 1;
+                    } else if (ratingOptions.contains("japanese") && recipe.getCuisines().contains("Japanese")) {
+                        countedFilters += 1;
+                    }
+                }
+            }
+
+            Log.d("*totalFilters", countedFilters + " " + totalFilters);
             if (countedFilters == totalFilters) {
                 filteredRecipes.add(recipe);
             }
@@ -147,7 +175,7 @@ public class FavoriteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void getDishTypes(final DataSnapshot ds, final int index, DatabaseReference reference) {
+    private void setDishTypes(final DataSnapshot ds, final int index, DatabaseReference reference) {
         final List<String> dishTypes = new ArrayList<>();
         reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
             @Override
@@ -156,6 +184,23 @@ public class FavoriteFragment extends Fragment {
                     dishTypes.add(dishType.getValue().toString());
                 }
                 favoriteRecipes.get(index).setDishTypes(dishTypes);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setCuisines(final DataSnapshot ds, final int index, DatabaseReference reference) {
+        final List<String> cuisines = new ArrayList<>();
+        reference.child("Cuisines").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (final DataSnapshot dishType : ds.getChildren()) {
+                    cuisines.add(dishType.getValue().toString());
+                }
+                favoriteRecipes.get(index).setCuisines(cuisines);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -181,7 +226,9 @@ public class FavoriteFragment extends Fragment {
 
                         for (final DataSnapshot ds : snap.getChildren()) {
                             if (ds.getKey().toString().equals("Dish Types")) {
-                                getDishTypes(ds, index, reference);
+                                setDishTypes(ds, index, reference);
+                            } else if (ds.getKey().toString().equals("Cuisines")) {
+                                setCuisines(ds, index, reference);
                             } else if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
                             } else if (ds.getKey().toString().equals("Recipe Time")) {
@@ -260,6 +307,21 @@ public class FavoriteFragment extends Fragment {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 true);
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (!selectedFilters.containsKey("Meal Type")) {
+                    mealTypeToggleBtn.setChecked(false);
+                } else if (!selectedFilters.containsKey("Cooking Time")) {
+                    cookingTimeToggleBtn.setChecked(false);
+                } else if (!selectedFilters.containsKey("Cuisine")) {
+                    cuisineToggleBtn.setChecked(false);
+                } else if (!selectedFilters.containsKey("Rating")) {
+                    ratingToggleBtn.setChecked(false);
+                }
+            }
+        });
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         filter_recyclerview = popupView.findViewById(R.id.filter_recyclerview);
         selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
@@ -278,7 +340,6 @@ public class FavoriteFragment extends Fragment {
             }
         });
 
-        // TODO: Filter favorite recipes according to the selectedFilters
         applyFilterButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -286,6 +347,7 @@ public class FavoriteFragment extends Fragment {
                     if (filterAdapter.getSelectedFilters().size() == 0) {
                         selectedFilters.remove("Meal Type");
                         view.setChecked(false);
+                        Log.d("*selectedFilters", selectedFilters.size() + "");
                     } else {
                         selectedFilters.put("Meal Type", filterAdapter.getSelectedFilters());
                         view.setChecked(true);

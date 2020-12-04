@@ -237,10 +237,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         }
 
                         // getting cuisines
-//                        JSONArray cuisinesJSON = recipeJSON.getJSONArray("cuisines");
-//                        for (int i = 0; i < cuisinesJSON.length(); i++) {
-//                            cuisines.add(cuisinesJSON.get(i).toString());
-//                        }
+                        JSONArray cuisinesJSON = recipeJSON.getJSONArray("cuisines");
+                        for (int i = 0; i < cuisinesJSON.length(); i++) {
+                            cuisines.add(cuisinesJSON.get(i).toString());
+                        }
 
                         // getting calories (within another JSON array of the JSONobject
                         JSONObject nutritionJSON = new JSONObject(recipeJSON.getString("nutrition"));
