@@ -2,6 +2,7 @@ package com.example.simplyrecipes.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -85,10 +86,13 @@ public class FavoriteFragment extends Fragment {
     private void applyFilter() {
         filteredRecipes.clear();
         int countedFilters = 0;
-        int totalFilters = selectedFilters.size();
+        int totalFilters = 0;
 
-        Log.d("*totalFilters", " " + totalFilters);
-        if (totalFilters == 0) {
+        for (Map.Entry<String, Set<String>> entry : selectedFilters.entrySet()) {
+            totalFilters += entry.getValue().size();
+        }
+
+        if (selectedFilters.size() == 0) {
             filteredRecipes.addAll(favoriteRecipes);
             adapter.notifyDataSetChanged();
             return;
@@ -111,7 +115,6 @@ public class FavoriteFragment extends Fragment {
 
             if (selectedFilters.containsKey("Cooking Time")) {
                 Set<String> ratingOptions = selectedFilters.get("Cooking Time");
-                Log.d("**LALA", ratingOptions + " " + recipe.getRecipeTime() );
                 if (ratingOptions.contains("Less than 15 minutes") && recipe.getRecipeTime() < 15) {
                     countedFilters += 1;
                 } else if (ratingOptions.contains("15 - 30 minutes") && recipe.getRecipeTime() >= 15 && recipe.getRecipeTime() < 30) {
@@ -167,7 +170,6 @@ public class FavoriteFragment extends Fragment {
                 }
             }
 
-            Log.d("*totalFilters", countedFilters + " " + totalFilters);
             if (countedFilters == totalFilters) {
                 filteredRecipes.add(recipe);
             }
@@ -293,7 +295,31 @@ public class FavoriteFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    Log.d("Ischecked", isChecked + "");
                     showPopupFilter(buttonView);
+                } else {
+                    Log.d("**Ischecked", isChecked + "");
+                    if (buttonView.equals(mealTypeToggleBtn) && selectedFilters.containsKey("Meal Type")) {
+                        if (selectedFilters.get("Meal Type").size() > 0) {
+                            mealTypeToggleBtn.setChecked(true);
+                            showPopupFilter(buttonView);
+                        }
+                    } else if (buttonView.equals(cookingTimeToggleBtn) && selectedFilters.containsKey("Cooking Time")) {
+                        if (selectedFilters.get("Cooking Time").size() > 0) {
+                            cookingTimeToggleBtn.setChecked(true);
+                            showPopupFilter(buttonView);
+                        }
+                    } else if (buttonView.equals(cuisineToggleBtn) && selectedFilters.containsKey("Cuisine")) {
+                        if (selectedFilters.get("Cuisine").size() > 0) {
+                            cuisineToggleBtn.setChecked(true);
+                            showPopupFilter(buttonView);
+                        }
+                    } if (buttonView.equals(ratingToggleBtn) && selectedFilters.containsKey("Rating")) {
+                        if (selectedFilters.get("Rating").size() > 0) {
+                            ratingToggleBtn.setChecked(true);
+                            showPopupFilter(buttonView);
+                        }
+                    }
                 }
             }
         };
@@ -322,6 +348,7 @@ public class FavoriteFragment extends Fragment {
                 }
             }
         });
+
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         filter_recyclerview = popupView.findViewById(R.id.filter_recyclerview);
         selectFilterTextView = popupView.findViewById(R.id.select_filter_tv);
