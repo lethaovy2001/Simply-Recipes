@@ -165,16 +165,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         });
 
                 // set up Cuisines
-//                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
-//                reference.child("Cuisines").setValue(cuisines)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if(task.isSuccessful()) {
-//
-//                                }
-//                            }
-//                        });
+                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+                reference.child("Cuisines").setValue(cuisines)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()) {
+
+                                }
+                            }
+                        });
 
                 // set up Recipe Rating
                 reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
@@ -188,12 +188,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
                             }
                         });
 
-//                Log.d("***ERR", "crash here?" + success[0]);
-//
-//                if(success[0] == true) {
-//                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time, rating);
-//                    ApplicationClass.currentUser.favoriteRecipes.add(savedRecipe);
-//                }
+                if(success[0] == true) {
+                    System.out.println("Recipe Saved Successfully");
+                    Recipe savedRecipe = new Recipe(recipeID,recipe_name.getText().toString(), image_url, recipe_time, rating);
+                    ApplicationClass.currentUser.favoriteRecipes.add(savedRecipe);
+                }
             }
         });
     }
