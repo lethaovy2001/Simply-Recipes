@@ -123,6 +123,23 @@ public class FavoriteFragment extends Fragment {
                 }
             }
 
+            if (selectedFilters.containsKey("Meal Type")) {
+                Set<String> ratingOptions = selectedFilters.get("Meal Type");
+                if (ratingOptions.contains("breakfast") && recipe.getDishTypes().contains("breakfast")) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("brunch") && recipe.getDishTypes().contains("brunch")) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("main dish") && recipe.getDishTypes().contains("main dish")) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("lunch") && recipe.getDishTypes().contains("lunch")) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("dinner") && recipe.getDishTypes().contains("dinner")) {
+                    countedFilters += 1;
+                } else if (ratingOptions.contains("side dish") && recipe.getDishTypes().contains("side dish")) {
+                    countedFilters += 1;
+                }
+            }
+
             if (countedFilters == totalFilters) {
                 filteredRecipes.add(recipe);
             }
@@ -130,12 +147,29 @@ public class FavoriteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    private void getDishTypes(final DataSnapshot ds, final int index, DatabaseReference reference) {
+        final List<String> dishTypes = new ArrayList<>();
+        reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (final DataSnapshot dishType : ds.getChildren()) {
+                    dishTypes.add(dishType.getValue().toString());
+                }
+                favoriteRecipes.get(index).setDishTypes(dishTypes);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void getFavoriteRecipes() {
         reference = FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Favorite");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //favoriteRecipes.clear();
+                int index = 0;
                 for (final DataSnapshot snap : snapshot.getChildren()) {
 
                     if (!snap.getKey().toString().equals("none")) {
@@ -144,23 +178,10 @@ public class FavoriteFragment extends Fragment {
                         String recipeURL = null;
                         String recipeTime = null;
                         String recipeRating = null;
-                        final List<String> dishTypes = new ArrayList<>();
 
                         for (final DataSnapshot ds : snap.getChildren()) {
                             if (ds.getKey().toString().equals("Dish Types")) {
-                                reference.child("Dish Types").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for (final DataSnapshot dishType : ds.getChildren()) {
-                                            dishTypes.add(dishType.getValue().toString());
-                                            // **** GET THE DISH TYPE
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                getDishTypes(ds, index, reference);
                             } else if (ds.getKey().toString().equals("Recipe Name")) {
                                 recipeName = ds.getValue().toString();
                             } else if (ds.getKey().toString().equals("Recipe Time")) {
@@ -172,7 +193,6 @@ public class FavoriteFragment extends Fragment {
                             }
                         }
 
-                        // ***** ADD RECIPES TO FAVORITE
                         Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), Double.parseDouble(recipeRating));
                         favoriteRecipes.add(currRecipe);
 
@@ -189,9 +209,8 @@ public class FavoriteFragment extends Fragment {
                         if (recipeRating == null) {
                             recipeRating = "-1";
                         }
-
-
                     }
+                    index += 1;
                 }
 
                 filteredRecipes.addAll(favoriteRecipes);
@@ -323,11 +342,4 @@ public class FavoriteFragment extends Fragment {
         }
         filter_recyclerview.setAdapter(filterAdapter);
     }
-}
-
-interface OnGetDataListener {
-    //this is for callbacks
-    void onSuccess(Recipe recipe, List<String> dishType);
-    void onStart();
-    void onFailure();
 }

@@ -165,16 +165,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         });
 
                 // set up Cuisines
-                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
-                reference.child("Cuisines").setValue(cuisines)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()) {
-
-                                }
-                            }
-                        });
+//                reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
+//                reference.child("Cuisines").setValue(cuisines)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if(task.isSuccessful()) {
+//
+//                                }
+//                            }
+//                        });
 
                 // set up Recipe Rating
                 reference = db.getReference("users/"+auth.getCurrentUser().getUid()+"/Favorite/"+recipeID);
@@ -241,6 +241,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
                         for (int i = 0; i < dishTypesJSON.length(); i++) {
                             dishTypes.add(dishTypesJSON.get(i).toString());
                         }
+
+                        // getting cuisines
+//                        JSONArray cuisinesJSON = recipeJSON.getJSONArray("cuisines");
+//                        for (int i = 0; i < cuisinesJSON.length(); i++) {
+//                            cuisines.add(cuisinesJSON.get(i).toString());
+//                        }
 
                         // getting calories (within another JSON array of the JSONobject
                         JSONObject nutritionJSON = new JSONObject(recipeJSON.getString("nutrition"));
