@@ -240,7 +240,10 @@ public class FavoriteFragment extends Fragment {
                                 recipeRating = ds.getValue().toString();
                             }
                         }
-
+                        if (recipeRating == null || recipeTime == null) {
+                            recipeTime = "-1";
+                            recipeRating = "-1";
+                        }
                         Recipe currRecipe = new Recipe(recipeID, recipeName, recipeURL, Integer.parseInt(recipeTime), Double.parseDouble(recipeRating));
                         favoriteRecipes.add(currRecipe);
 
