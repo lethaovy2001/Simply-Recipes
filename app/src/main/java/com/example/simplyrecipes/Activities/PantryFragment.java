@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,16 +22,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class PantryFragment extends Fragment {
     private static final String TAG = "Pantry Fragment";
 
     FirebaseAuth mAuth;
     DatabaseReference mDbReference; // Pantry
+    Button seeRecipeBtn;
     List<Ingredient> mPantryIngredients;
+    List<Recipe> mRecipeResults;
     PantryPageAdapter mIngredientAdapter;
+    FavoriteAdapter mRecipeResultAdapter;
     RecyclerView mIngredientsView;
     FirebaseDatabase mDatabase;
 
@@ -46,9 +62,18 @@ public class PantryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
         mPantryIngredients = new ArrayList<>();
+        seeRecipeBtn = view.findViewById(R.id.see_recipe_button);
+        mRecipeResults = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance();
         mIngredientsView = view.findViewById(R.id.pantry_recyclerview);
         getPantryList();
+
+        seeRecipeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRecipes();
+            }
+        });
     }
 
     private void getPantryList() {
@@ -93,6 +118,76 @@ public class PantryFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("error", error.getMessage());
+            }
+        });
+    }
+
+    private void getRecipes() {
+
+        String pantryIngredients = "ingredients=";
+        for(int i = 0; i < mPantryIngredients.size(); i++) {
+            if(i == 0) {
+                pantryIngredients = pantryIngredients + mPantryIngredients.get(i).getIngredientName();
+            }
+            else {
+                pantryIngredients = pantryIngredients+"%2C"+mPantryIngredients.get(i).getIngredientName();
+            }
+        }
+
+        mIngredientAdapter.clear();
+
+        Toast.makeText(getActivity().getApplicationContext(), pantryIngredients, Toast.LENGTH_SHORT).show();
+        OkHttpClient client = new OkHttpClient();
+        String urlString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?" +
+                pantryIngredients+"&number=5&ranking=1&ignorePantry=true";
+        Request request = new Request.Builder().url(urlString).get()
+                .addHeader("x-rapidapi-key", "d166d242afmsh34a43231b52cb39p144850jsn8fe031c85cf5")
+                .addHeader("x-rapidapi-host", "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com").build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Toast.makeText(getActivity().getApplicationContext(), "Error occurred retrieving the recipes", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                // get recipe results and add them to recipe list
+                if(response.isSuccessful()) {
+                    String responseJSON = response.body().string();
+                    try {
+                        JSONArray jsonArray = new JSONArray(responseJSON);
+
+                        for(int i =0; i < jsonArray.length(); i++) {
+                            JSONObject currRecipe = jsonArray.getJSONObject(i);
+
+                            int recipeID = currRecipe.getInt("id");
+                            String title = currRecipe.getString("title");
+                            String image = currRecipe.getString("image");
+                            Recipe recipe = new Recipe(recipeID, title, image,-1,-1);
+
+                            mRecipeResults.add(recipe);
+                        }
+                    }
+                    catch(Exception e) {
+                        Toast.makeText(getActivity().getApplicationContext(), "An Error occurred while retrieving recipes", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.out.println(mRecipeResults.get(0).toString());
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRecipeResultAdapter = new FavoriteAdapter(getActivity().getApplicationContext(),mRecipeResults);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+
+                            mIngredientsView.setLayoutManager(layoutManager);
+                            mIngredientsView.setAdapter(mRecipeResultAdapter);
+                        }
+                    });
+                }
             }
         });
     }

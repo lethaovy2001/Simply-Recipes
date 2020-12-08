@@ -171,6 +171,12 @@ public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.Vi
                 "list", Toast.LENGTH_SHORT).show();
     }
 
+    public void clear() {
+        int size = ingredients.size();
+        ingredients.clear();
+        notifyItemRangeRemoved(0,size);
+    }
+
     /**
      * Return ingredients list size
      *
