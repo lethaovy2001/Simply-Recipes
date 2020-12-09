@@ -215,7 +215,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Toast.makeText(RecipeDetailActivity.this, "Error occurred retrieving the recipe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecipeDetailActivity.this, "Error occurred while retrieving recipe ", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 

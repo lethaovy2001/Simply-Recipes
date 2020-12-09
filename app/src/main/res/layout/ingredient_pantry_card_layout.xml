@@ -53,14 +53,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="3dp"
-                android:layout_marginBottom="6dp"
-                android:text="Tomato"
                 android:textColor="@color/colorHeading"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/category_tv"
@@ -69,7 +66,6 @@
                 android:layout_marginVertical="3dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="3dp"
-                android:text="Vegetables"
                 android:textSize="11sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

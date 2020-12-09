@@ -61,6 +61,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         }
 
         holder.favorite_trash_icon.setClickable(true);
+        holder.favorite_trash_icon.setVisibility(View.VISIBLE);
         holder.favorite_recipe_image.setClickable(true);
 
         holder.favorite_recipe_image.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +96,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
         int recipePosition = recipes.indexOf(deleteRecipe);
         recipes.remove(recipePosition);
+
         notifyItemRemoved(recipePosition);
         notifyItemRangeChanged(0, recipes.size());
         Toast.makeText(context, deleteRecipe.getTitle() + " successfuly removed!", Toast.LENGTH_SHORT).show();
