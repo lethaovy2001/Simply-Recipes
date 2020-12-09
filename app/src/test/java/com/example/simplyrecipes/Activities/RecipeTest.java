@@ -4,6 +4,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RecipeTest {
@@ -16,6 +19,7 @@ class RecipeTest {
     private double recipeRating;
     private String url;
     private int recipeTime;
+    private List<String> dishTypes, cuisines;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +31,15 @@ class RecipeTest {
         url = "ratatouille.com";
         recipeTime = 2;
         homePageRecipe = new Recipe(recipeID, title, image, recipeRating, url);
-        favoriteRecipe = new Recipe(recipeID, recipeName, image, recipeTime);
+        favoriteRecipe = new Recipe(recipeID, recipeName, image, recipeTime, recipeRating);
+
+        dishTypes = new ArrayList<String>();
+        cuisines = new ArrayList<String>();
+        dishTypes.add("breakfast");
+        cuisines.add("Asian");
+
+        homePageRecipe.setDishTypes(dishTypes);
+        homePageRecipe.setCuisines(cuisines);
     }
 
     @AfterEach
@@ -100,5 +112,27 @@ class RecipeTest {
     void setUrlTest() {
         homePageRecipe.setUrl("stew.com");
         assertEquals("stew.com", homePageRecipe.getUrl());
+    }
+
+    @Test
+    void getDishTypesTest() {
+        assertEquals(dishTypes, homePageRecipe.getDishTypes());
+    }
+
+    @Test
+    void setDishTypesTest() {
+        homePageRecipe.setDishTypes(dishTypes);
+        assertEquals(dishTypes, homePageRecipe.getDishTypes());
+    }
+
+    @Test
+    void getCuisinesTest() {
+        assertEquals(cuisines, homePageRecipe.getCuisines());
+    }
+
+    @Test
+    void setCuisinesTest() {
+        homePageRecipe.setCuisines(cuisines);
+        assertEquals(cuisines, homePageRecipe.getCuisines());
     }
 }

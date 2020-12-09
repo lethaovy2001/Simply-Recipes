@@ -26,6 +26,7 @@ class CurrentUserTest {
     private String image_1, image_2;
     private int recipe_time_1, recipe_time_2;
     private Recipe recipe_1, recipe_2;
+    private double recipe_rating_1, recipe_rating_2;
 
     @BeforeEach
     void setUp() {
@@ -39,8 +40,10 @@ class CurrentUserTest {
         recipe_name_2 = "remy";
         image_2 = "0";
         recipe_time_2 = 1;
-        recipe_1 = new Recipe(recipeID_1, recipe_name_1, image_1, recipe_time_1);
-        recipe_2 = new Recipe(recipeID_2, recipe_name_2, image_2, recipe_time_2);
+        recipe_rating_1 = 3.6;
+        recipe_rating_2 = 4.2;
+        recipe_1 = new Recipe(recipeID_1, recipe_name_1, image_1, recipe_time_1, recipe_rating_1);
+        recipe_2 = new Recipe(recipeID_2, recipe_name_2, image_2, recipe_time_2, recipe_rating_2);
         userRecipeList = new ArrayList<Recipe>();
         userRecipeList.add(recipe_1);
         userRecipeList.add(recipe_2);
