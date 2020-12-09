@@ -1,7 +1,10 @@
 package com.example.simplyrecipes.Activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.simplyrecipes.R;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Stack;
 
@@ -66,12 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
                     TextView toolbarTitle = findViewById(R.id.toolbar_title_text);
                     toolbarTitle.setText(menuTitle);
+
                     return true;
                 }
             };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -86,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
         this.toolbar = (Toolbar) findViewById(R.id.toolbar);
         TextView toolBarTitle = findViewById(R.id.toolbar_title_text);
         toolbar.setTitle("");
+        toolbar.inflateMenu(R.menu.menu_logout);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id == R.id.logout_action) {
+                    logoutApp();
+                }
+                return false;
+            }
+        });
     }
 
 //    /**
@@ -143,5 +160,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Fragment fragment = mFragment.findFragmentById(R.id.fragment_container);
         super.onBackPressed();
+    }
+
+    public void logoutApp() {
+        Intent intent = new Intent(this, SignInActivity.class);
+        finish();
+        startActivity(intent);
     }
 }

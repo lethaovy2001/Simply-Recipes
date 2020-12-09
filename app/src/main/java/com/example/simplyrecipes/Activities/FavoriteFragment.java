@@ -1,9 +1,13 @@
 package com.example.simplyrecipes.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +59,7 @@ public class FavoriteFragment extends Fragment {
     Filter filters;
     HashMap<String, Set<String>> selectedFilters;
     Context context;
+    FirebaseAuth mAuth;
 
     @Nullable
     @Override
@@ -79,6 +84,7 @@ public class FavoriteFragment extends Fragment {
         getFavoriteRecipes();
         addListenerOnToggleButtonClick();
     }
+
 
     private void applyFilter() {
         filteredRecipes.clear();
