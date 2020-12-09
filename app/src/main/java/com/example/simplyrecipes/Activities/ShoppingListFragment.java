@@ -75,8 +75,7 @@ public class ShoppingListFragment extends Fragment {
                                 ingredientCategory = ds.getValue().toString();
                             }
                         }
-                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName,
-                                ingredientCategory);
+                        Ingredient ingredient = new Ingredient(ingredientId, ingredientName, ingredientCategory);
                         shoppingListIngredients.add(ingredient);
                     }
                 }

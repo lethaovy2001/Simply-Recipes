@@ -22,6 +22,10 @@ public class Ingredient {
         this.ingredientName = ingredientName;
         this.ingredientCategory = ingredientCategory;
     }
+    public Ingredient(int ingredientID, String ingredientName) {
+        this.ingredientID = ingredientID;
+        this.ingredientName = ingredientName;
+    }
 
     public boolean isInShoppingCart() {
         return inShoppingCart;
