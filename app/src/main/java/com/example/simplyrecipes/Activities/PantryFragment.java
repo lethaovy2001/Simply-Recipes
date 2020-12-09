@@ -58,6 +58,7 @@ public class PantryFragment extends Fragment {
     FavoriteAdapter mRecipeResultAdapter;
     RecyclerView mIngredientsView;
     FirebaseDatabase mDatabase;
+    TextView pantry_ingredient_tv;
     boolean existInDatabase;
 
 
@@ -79,7 +80,12 @@ public class PantryFragment extends Fragment {
         mRecipeResults = new ArrayList<>();
         mDatabase = FirebaseDatabase.getInstance();
         mIngredientsView = view.findViewById(R.id.pantry_recyclerview);
-        getPantryList();
+        pantry_ingredient_tv = view.findViewById(R.id.pantry_ingredient_tv);
+
+        // in case, the text does not revert back to its original text
+        pantry_ingredient_tv.setText("INGREDIENTS:");
+                getPantryList();
+
 
         seeRecipeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +176,14 @@ public class PantryFragment extends Fragment {
 
 
     private void getRecipes() {
+        ingredient_textbox.setVisibility(View.INVISIBLE);
+        add_ingredient_button.setVisibility(View.INVISIBLE);
+        add_ingredient_button.setClickable(false);
+        pantry_ingredient_tv.setText("Recipe Results");
+        seeRecipeBtn.setVisibility(View.INVISIBLE);
+        seeRecipeBtn.setClickable(false);
+
+
 
         String pantryIngredients = "ingredients=";
         for(int i = 0; i < mPantryIngredients.size(); i++) {
@@ -182,8 +196,7 @@ public class PantryFragment extends Fragment {
         }
 
         mIngredientAdapter.clear();
-
-        Toast.makeText(getActivity().getApplicationContext(), pantryIngredients, Toast.LENGTH_SHORT).show();
+        
         OkHttpClient client = new OkHttpClient();
         String urlString = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?" +
                 pantryIngredients+"&number=5&ranking=1&ignorePantry=true";
