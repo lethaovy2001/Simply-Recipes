@@ -90,6 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // then the shopping list
                             FirebaseDatabase.getInstance().getReference("users/"+FirebaseAuth.getInstance()
                                     .getCurrentUser().getUid()).child("Shopping List").child("none").setValue("none");
+                            Toast.makeText(SignUpActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                             startActivity(intent);
                             SignUpActivity.this.finish();
