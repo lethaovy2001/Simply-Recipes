@@ -3,6 +3,7 @@ package com.example.simplyrecipes.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -118,7 +119,7 @@ public class FavoriteFragment extends Fragment {
 
             if (selectedFilters.containsKey("Cooking Time")) {
                 Set<String> ratingOptions = selectedFilters.get("Cooking Time");
-                if (ratingOptions.contains("Less than 15 minutes") && recipe.getRecipeTime() < 15) {
+                if (ratingOptions.contains("Less than 15 minutes".toLowerCase()) && recipe.getRecipeTime() < 15) {
                     countedFilters += 1;
                 } else if (ratingOptions.contains("15 - 30 minutes") && recipe.getRecipeTime() >= 15 && recipe.getRecipeTime() < 30) {
                     countedFilters += 1;
@@ -126,7 +127,7 @@ public class FavoriteFragment extends Fragment {
                     countedFilters += 1;
                 } else if (ratingOptions.contains("60 - 120 minutes") && recipe.getRecipeTime() >= 60 && recipe.getRecipeTime() < 120) {
                     countedFilters += 1;
-                } else if (ratingOptions.contains("More than 120 minutes") && recipe.getRecipeTime() >= 120) {
+                } else if (ratingOptions.contains("More than 120 minutes".toLowerCase()) && recipe.getRecipeTime() >= 120) {
                     countedFilters += 1;
                 }
             }
