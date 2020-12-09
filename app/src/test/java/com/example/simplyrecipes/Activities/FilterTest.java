@@ -39,19 +39,20 @@ class FilterTest {
     void getMealTypeOptions() {
         mealTypeList.add("Breakfast");
         mealTypeList.add("Brunch");
+        mealTypeList.add("Main Dish");
         mealTypeList.add("Lunch");
-        mealTypeList.add("Supper");
         mealTypeList.add("Dinner");
+        mealTypeList.add("Side Dish");
         assertEquals(mealTypeList, filters.getMealTypeOptions());
     }
 
     @Test
     void getCookingTimeOptions() {
         cookingTimeList.add("Less than 15 minutes");
-        cookingTimeList.add("15 minutes - 30 minutes");
-        cookingTimeList.add("30 minutes - 1 hour");
-        cookingTimeList.add("1 hour - 2 hours ");
-        cookingTimeList.add("More than 2 hours");
+        cookingTimeList.add("15 - 30 minutes");
+        cookingTimeList.add("30 - 60 minutes");
+        cookingTimeList.add("60 - 120 minutes");
+        cookingTimeList.add("More than 120 minutes");
         assertEquals(cookingTimeList, filters.getCookingTimeOptions());
     }
 
@@ -59,7 +60,8 @@ class FilterTest {
     void getRatingOptions() {
         ratingList.add("4.0 - 5.0");
         ratingList.add("3.0 - 4.0");
-        ratingList.add("2.0 - 1.0");
+        ratingList.add("2.0 - 3.0");
+        ratingList.add("1.0 - 2.0");
         assertEquals(ratingList, filters.getRatingOptions());
     }
 
@@ -67,12 +69,12 @@ class FilterTest {
     void getCuisineOptions() {
         cuisineList.add("Chinese");
         cuisineList.add("Mexican");
-        cuisineList.add("Korean");
-        cuisineList.add("Vietnamese");
+        cuisineList.add("Italian");
+        cuisineList.add("European");
         cuisineList.add("Indian");
         cuisineList.add("Caribbean");
-        cuisineList.add("Indian");
-        cuisineList.add("Thai");
+        cuisineList.add("Mediterranean");
+        cuisineList.add("Asian");
         cuisineList.add("Japanese");
         assertEquals(cuisineList, filters.getCuisineOptions());
     }
