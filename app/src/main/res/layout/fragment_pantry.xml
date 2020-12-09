@@ -61,32 +61,4 @@
         app:layout_constraintTop_toBottomOf="@+id/pantry_recyclerview"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/ingredient_textbox"
-        android:layout_width="199dp"
-        android:layout_height="42dp"
-        android:ems="10"
-        android:hint="Enter Ingredient"
-        android:inputType="textPersonName"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/pantry_recyclerview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
-        app:layout_constraintStart_toEndOf="@+id/pantry_ingredient_tv"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004" />
-
-    <Button
-        android:id="@+id/add_ingredient_button"
-        android:layout_width="66dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_corners"
-        android:text="ADD"
-        android:textColor="#FAF9F9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toEndOf="@+id/ingredient_textbox"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

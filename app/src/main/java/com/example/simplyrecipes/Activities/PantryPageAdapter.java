@@ -74,17 +74,23 @@ public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final int currentPosition = position; // for On click listener
         holder.ingredient.setText(ingredients.get(position).getIngredientName());
-        holder.add_to_cart.setClickable(false);
-        holder.add_to_cart.setVisibility(View.INVISIBLE);
+        holder.category.setText(ingredients.get(position).getIngredientCategory());
+        holder.add_to_cart.setClickable(true);
+        holder.add_to_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Add", Toast.LENGTH_SHORT).show();
+                Ingredient addIngredient = ingredients.get(currentPosition);
+                addIngredientToShoppingCart(addIngredient, currentPosition);
+            }
+        });
         holder.remove_from_pantry.setClickable(true);
         holder.remove_from_pantry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "remove", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Removing...", Toast.LENGTH_SHORT).show();
                 Ingredient deleteIngredient = ingredients.get(currentPosition);
                 removeIngredient(deleteIngredient);
-                ingredients.clear();
-
             }
         });
 
@@ -149,20 +155,20 @@ public class PantryPageAdapter extends RecyclerView.Adapter<PantryPageAdapter.Vi
     private void removeIngredient(Ingredient deleteIngredient) {
         // remove ingredient from Firebase Database
         auth = FirebaseAuth.getInstance();
-
         reference =
                 FirebaseDatabase.getInstance().getReference("users/" + auth.getCurrentUser().getUid() + "/Pantry");
         reference.child(deleteIngredient.getIngredientID() + "").removeValue();
-
+        Toast.makeText(context, deleteIngredient.getIngredientName() + " has been removed from " +
+                "database", Toast.LENGTH_SHORT).show();
 
 
         // remove ingredient from recycler view
         int ingredientPosition = ingredients.indexOf(deleteIngredient);
         ingredients.remove(ingredientPosition);
         notifyItemRemoved(ingredientPosition);
-        notifyItemRangeChanged(0, ingredients.size());
         notifyItemRangeChanged(ingredientPosition, ingredients.size() - ingredientPosition);
-
+        Toast.makeText(context, deleteIngredient.getIngredientName() + " removed from shopping " +
+                "list", Toast.LENGTH_SHORT).show();
     }
 
     public void clear() {
